@@ -6,7 +6,7 @@ function Router() {
   return (
     <Routes>
       <Route path="/" element={<PageTemplate />} />
-      {/* Add all Routes here */}
+      {/* Add all Routes */}
     </Routes>
   );
 }
