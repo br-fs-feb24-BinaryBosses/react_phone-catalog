@@ -29,46 +29,55 @@ const data: CardData[] = [
 function PageCatalog() {
   return (
     <StyledPageCatalog className="page-catalog">
-      <div className="top-section">
-        <h1 className="top-section__title">Mobile Phones</h1>
-        <h2 className="top-section__subtitle">95 models</h2>
+      <div className="page-catalog__top-section">
+        <h1 className="page-catalog__top-section-title">Mobile Phones</h1>
+        <h2 className="page-catalog__top-section-subtitle">95 models</h2>
       </div>
-      <div className="select">
-        <div className="select__wrapper">
-          <h1 className="select__label">Sort By</h1>
-          <select className="select__box select__box--selected">
+      <div className="page-catalog__select">
+        <div className="page-catalog__select-wrapper">
+          <h1 className="page-catalog__select-label">Sort By</h1>
+          <select className="page-catalog__select-box page-catalog__select-box--selected">
             <option>Newest</option>
           </select>
         </div>
-        <div className="select__wrapper">
-          <h1 className="select__label">Items on page</h1>
-          <select className="select__box">
+        <div className="page-catalog__select-wrapper">
+          <h1 className="page-catalog__select-label">Items on page</h1>
+          <select className="page-catalog__select-box">
             <option>16</option>
           </select>
         </div>
       </div>
-      <div className="list">
+      <div className="page-catalog__list">
         {data.map(item => (
-          <div className="list__card" key={item.id} />
+          <div className="page-catalog__list-card" key={item.id} />
         ))}
       </div>
-      <div className="pagination">
-        <button type="button" className="pagination__button pagination__button--isarrow">
+      <div className="page-catalog__pagination">
+        <button
+          type="button"
+          className="page-catalog__pagination-button page-catalog__pagination-button--isarrow"
+        >
           &lt;
         </button>
-        <button type="button" className="pagination__button">
+        <button type="button" className="page-catalog__pagination-button">
           1
         </button>
-        <button type="button" className="pagination__button pagination__button--filled">
+        <button
+          type="button"
+          className="page-catalog__pagination-button page-catalog__pagination-button--filled"
+        >
           2
         </button>
-        <button type="button" className="pagination__button">
+        <button type="button" className="page-catalog__pagination-button">
           3
         </button>
-        <button type="button" className="pagination__button">
+        <button type="button" className="page-catalog__pagination-button">
           4
         </button>
-        <button type="button" className="pagination__button pagination__button--isarrow">
+        <button
+          type="button"
+          className="page-catalog__pagination-button page-catalog__pagination-button--isarrow"
+        >
           &gt;
         </button>
       </div>
