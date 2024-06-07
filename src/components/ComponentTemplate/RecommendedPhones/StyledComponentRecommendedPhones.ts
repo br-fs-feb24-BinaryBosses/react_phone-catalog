@@ -58,25 +58,25 @@ const StyledComponentRecommendedPhones = styled.div`
       margin-top: 12px;
       overflow: hidden;
       transition: transform 0.5s ease;
-    }
 
-    &__card {
-      width: 212px;
-      height: 439px;
-      padding: 32px 0px 0px 0px;
-      gap: 8px;
-      border-radius: 8px 0px 0px 0px;
-      border: 1px 0px 0px 0px;
-      opacity: 0px;
+      &-card {
+        width: 212px;
+        height: 439px;
+        padding: 32px 0px 0px 0px;
+        gap: 8px;
+        border-radius: 8px 0px 0px 0px;
+        border: 1px 0px 0px 0px;
+        opacity: 0px;
 
-      @media (min-width: 640px) {
-        width: 237px;
-        height: 512px;
-      }
+        @media (min-width: 640px) {
+          width: 237px;
+          height: 512px;
+        }
 
-      @media (min-width: 1200px) {
-        width: 272px;
-        height: 506px;
+        @media (min-width: 1200px) {
+          width: 272px;
+          height: 506px;
+        }
       }
     }
   }

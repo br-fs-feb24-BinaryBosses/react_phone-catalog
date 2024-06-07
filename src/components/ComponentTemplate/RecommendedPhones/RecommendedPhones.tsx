@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import StyledComponentRecommendedPhones from './StyledComponentRecommendedPhones.ts';
 import recommendedPhonesData from './RecommendedPhonesData.ts';
-import PhoneItem from './PhoneItem.tsx';
+import ProductCard from '../ProductCard/ProductCard.tsx';
 
 function RecommendedPhones(): React.ReactNode {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -69,8 +69,12 @@ function RecommendedPhones(): React.ReactNode {
         style={{ transform: `translateX(-${(100 / itemsToShow) * currentIndex}%)` }}
       >
         {recommendedPhonesData.slice(currentIndex, currentIndex + itemsToShow).map(phone => (
-          <div key={phone.id} className="card" style={{ width: `${100 / itemsToShow}%` }}>
-            <PhoneItem key={phone.id} phone={phone} />{' '}
+          <div
+            key={phone.id}
+            className="recommended-phones__list-card"
+            style={{ width: `${100 / itemsToShow}%` }}
+          >
+            <ProductCard key={phone.id} />{' '}
           </div>
         ))}
       </div>
