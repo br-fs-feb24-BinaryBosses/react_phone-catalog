@@ -4,6 +4,7 @@ export const GlobalStyles = createGlobalStyle`
   :root {
     --rstyle1-primary:#0F0F11;
     --rstyle1-secondary-accent: #F4BA47;
+    --rstyle1-gray-primary: #0f0f11;
     --rstyle1-gray-secondary: #89939A;
     --rstyle1-gray-icons-placeholders: #B4BDC3;
     --rstyle1-gray-elements: #E2E6E9;
@@ -12,6 +13,12 @@ export const GlobalStyles = createGlobalStyle`
     --rstyle1-green2: #27AE60;
     --rstyle1-red: #EB5757;
     --rstyle1-accent: #4219D0;
+
+    display: flex;
+    margin-top: 10px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
   }
 
   @font-face {

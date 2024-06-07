@@ -1,14 +1,9 @@
 import React from 'react';
 import Router from './routes/Router.tsx';
+import PageCatalogExample from './pages/PageCatalogExample/PageCatalogExample.tsx';
 
 function App() {
-  return (
-    <>
-      {/* Header com Nav Links */}
-      <Router />
-      {/* Footer */}
-    </>
-  );
+  return <PageCatalogExample />;
 }
 
 export default App;
