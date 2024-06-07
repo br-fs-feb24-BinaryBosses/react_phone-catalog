@@ -1,5 +1,4 @@
 import React from 'react';
-import NotFound from '../NotFound/NotFound.tsx';
 
 /* interface PageTemplateProps {
   // Define here props of this Component
@@ -11,7 +10,7 @@ function PageTemplate(/* props: PageTemplateProps */): React.ReactNode {
   } = props;
   */
 
-  return <NotFound />;
+  return <h1>Hello World!</h1>;
 }
 
 export default PageTemplate;

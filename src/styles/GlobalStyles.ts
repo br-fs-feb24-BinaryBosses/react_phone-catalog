@@ -31,6 +31,10 @@ export const GlobalStyles = createGlobalStyle`
     font-weight: 600;
     src: url('fonts/Mont-Regular.otf') format('opentype');
   }
+  
+  * {
+    box-sizing: border-box;
+  }
 
   body {
     background-color: var(--dark-black);
