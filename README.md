@@ -1,36 +1,6 @@
-<!-- # React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
- -->
-
 # React Phone Catalog Documentation
+
+[Reference: Airbnb React/JSX Style Guide](https://github.com/airbnb/javascript/tree/master/react)
 
 ## Overview
 
@@ -46,6 +16,7 @@ This project, `react_phone-catalog`, is a React-based web application designed t
 - [Building and Previewing](#building-and-previewing)
 - [Pre-commit Hooks](#pre-commit-hooks)
 - [TypeScript Support](#typescript-support)
+- [Using Plop](#using-plop)
 
 ## Getting Started
 
@@ -199,6 +170,74 @@ npm run prepare
 
 The project is built with TypeScript to provide type safety and enhance developer experience. TypeScript configurations and dependencies are already set up in the project.
 
+## Using Plop
+
+Plop is a micro-generator framework that makes it easy to create boilerplate code for new components and pages in a consistent manner.
+
+### Setting Up Plop
+
+Plop is already configured in the project. The configuration file is located at `plopfile.js`. This file defines the generators available for creating new components and pages.
+
+### Creating a New Component
+
+To create a new component, run the following command:
+
+```bash
+npm run plop component
+```
+
+You will be prompted to enter the name of the new component. Plop will then generate the component files in the appropriate directory with the necessary boilerplate code.
+
+### Creating a New Page
+
+To create a new page, run the following command:
+
+```bash
+npm run plop page
+```
+
+You will be prompted to enter the name of the new page. Plop will generate the page files and include the necessary boilerplate code.
+
+### Customizing Plop Generators
+
+You can customize the existing generators or create new ones by modifying the `plopfile.js` file. Plop provides a flexible API for defining generators, prompts, and actions.
+
+Here is an example of a simple Plop generator for a component:
+
+```javascript
+module.exports = function (plop) {
+  plop.setGenerator('component', {
+    description: 'Create a new component',
+    prompts: [
+      {
+        type: 'input',
+        name: 'name',
+        message: 'Component name:',
+      },
+    ],
+    actions: [
+      {
+        type: 'add',
+        path: 'src/components/{{pascalCase name}}/{{pascalCase name}}.tsx',
+        templateFile: 'plop-templates/component.hbs',
+      },
+      {
+        type: 'add',
+        path: 'src/components/{{pascalCase name}}/{{pascalCase name}}.test.tsx',
+        templateFile: 'plop-templates/component.test.hbs',
+      },
+      {
+        type: 'add',
+        path: 'src/components/{{pascalCase name}}/index.ts',
+        templateFile: 'plop-templates/index.hbs',
+      },
+    ],
+  });
+};
+```
+
+In this example, the generator prompts the user for a component name and then creates the component file, test file, and an index file using Handlebars templates.
+
 ## Conclusion
 
-This documentation provides an overview of the `react_phone-catalog` project structure, dependencies, and development workflows. By following the guidelines and using the provided scripts, you can effectively develop and maintain this React application.
+This documentation provides an overview of the `react_phone-catalog` project structure, dependencies, development workflows, and how to use Plop to create new pages and components. By following the guidelines and using the provided scripts, you can effectively develop and maintain this React application.
