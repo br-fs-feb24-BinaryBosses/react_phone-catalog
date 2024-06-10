@@ -35,7 +35,7 @@ const StyledPageCatalog = styled.div`
 
       &-subtitle {
         ${letterStyleBodyTextDesktoAndTable}
-        color: #89939A;
+        color: var(--rstyle1-gray-secondary);
         margin: 0;
         margin-bottom: 32px;
 
@@ -74,7 +74,7 @@ const StyledPageCatalog = styled.div`
 
       &-label {
         ${letterStyleSmallTextDesktoAndTable};
-        color: #89939a;
+        color: var(--rstyle1-gray-secondary);
         margin-bottom: 4px;
       }
 
@@ -173,7 +173,7 @@ const StyledPageCatalog = styled.div`
         }
 
         &--filled {
-          background-color: #0f0f11;
+          background-color: var(--rstyle1-primary);
           color: #ffffff;
         }
 
