@@ -1,63 +1,69 @@
-import React from 'react';
-import {
-  StyledButton,
-  StyledDescription,
-  StyledHeart,
-  StyledLine,
-  StyledProductButtonLabel,
-  StyledProductCard,
-  StyledProductDescription,
-  StyledProductDetailDescription,
-  StyledProductDetailTitle,
-  StyledProductDetails,
-  StyledProductImage,
-  StyledProductLabel,
-  StyledProductPrice,
-  StyledProductTitle,
-  StyledTitle,
-} from './StyledProductCard.ts';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/control-has-associated-label */
+import React, { useState } from 'react';
+import { StyledProductCard } from './StyledProductCard.ts';
+import Icon from '../IconComponent/IconComponent.tsx';
+import { IconType } from '../IconComponent/IconComponent.types.ts';
+import { Phone } from '../../types/types.ts';
 
-function ProductCard() {
+interface Prop {
+  phone: Phone;
+}
+
+function ProductCard({ phone }: Prop) {
+  const [favorite, setFavorite] = useState(false);
+
+  const handleFavoriteClick = () => {
+    setFavorite(!favorite);
+  };
+
   return (
-    <StyledProductCard className="product-card">
-      <StyledProductLabel className="product-card__label">
-        <StyledProductImage
-          className="product-card__image"
-          src="public/img/phones/apple-iphone-14-pro/gold/00.webp"
-        />
-        <StyledProductDescription className="product-card__description">
-          <StyledProductTitle className="product-card__description-title">
-            Apple iPhone 14 Pro 128GB Silver (MQ023)
-          </StyledProductTitle>
-          <StyledProductPrice className="product-card__description-price">$999</StyledProductPrice>
-        </StyledProductDescription>
-        <StyledLine className="product-card__custom-line" />
-        <StyledProductDetails className="product-card__details">
-          <StyledProductDetailTitle className="product-card__details-title">
-            <StyledTitle className="product-card__details-title-content">Screen</StyledTitle>
-            <StyledTitle className="product-card__details-title-content">Capacity</StyledTitle>
-            <StyledTitle className="product-card__details-title-content">RAM</StyledTitle>
-          </StyledProductDetailTitle>
-          <StyledProductDetailDescription className="product-card__details-description">
-            <StyledDescription className="product-card__details-description-content">{`6.1" OLED`}</StyledDescription>
-            <StyledDescription className="product-card__details-description-content">
-              128 GB
-            </StyledDescription>
-            <StyledDescription className="product-card__details-description-content">
-              6 GB
-            </StyledDescription>
-          </StyledProductDetailDescription>
-        </StyledProductDetails>
-        <StyledProductButtonLabel className="product-card__btn-label">
-          <StyledButton className="product-card__btn">Add to cart</StyledButton>
-          <StyledHeart
-            className="product-card__btn-favorite"
-            src="public/img/EmptyHeart.svg"
-            alt="empty heart"
-          />
-        </StyledProductButtonLabel>
-      </StyledProductLabel>
-    </StyledProductCard>
+    <>
+      {/* {remember to add a link to the correct page} */}
+      <StyledProductCard className="product-card">
+        <a className="product-card__link">
+          <div className="product-card__wrapper">
+            <img className="product-card__image" src={phone.images[0]} alt={phone.name} />
+            <div className="product-card__description">
+              <h4 className="product-card__description-title">{phone.name}</h4>
+              <div className="product-card__description-price-wrapper">
+                <h3 className="product-card__description-price-discount">{`$${phone.priceDiscount}`}</h3>
+                <h3 className="product-card__description-price">{`$${phone.priceRegular}`}</h3>
+              </div>
+            </div>
+            <hr className="product-card__custom-line" />
+            <div className="product-card__details">
+              <div className="product-card__details-container">
+                <div className="product-card__details-screen">
+                  <span className="product-card__details-title">Screen</span>
+                  <span className="product-card__details-description">{phone.screen}</span>
+                </div>
+                <div className="product-card__details-capacity">
+                  <span className="product-card__details-title">Capacity</span>
+                  <span className="product-card__details-description">{phone.capacity}</span>
+                </div>
+                <div className="product-card__details-ram">
+                  <span className="product-card__details-title">RAM</span>
+                  <span className="product-card__details-description">{phone.ram}</span>
+                </div>
+              </div>
+            </div>
+            <div className="product-card__btn-container">
+              <button type="button" className="product-card__btn">
+                Add to cart
+              </button>
+              <button
+                type="button"
+                className="product-card__btn-favorite"
+                onClick={handleFavoriteClick}
+              >
+                <Icon icon={favorite ? IconType.FILLED_HEARTLIKE : IconType.EMPTY_HEARTLIKE} />
+              </button>
+            </div>
+          </div>
+        </a>
+      </StyledProductCard>
+    </>
   );
 }
 
