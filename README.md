@@ -14,6 +14,7 @@ This project, `react_phone-catalog`, is a React-based web application designed t
 - [Building and Previewing](#building-and-previewing)
 - [TypeScript Support](#typescript-support)
 - [Using Plop](#using-plop)
+- [Adding Props to a Functional Component](#adding-props-to-a-functional-component)
 
 ## Getting Started
 
@@ -128,6 +129,75 @@ npx plop page
 
 You will be prompted to enter the name of the new page. Plop will generate the page files and include the necessary boilerplate code.
 
+## Adding Props to a Functional Component
+
+Props are used to pass data from one component to another. Here's how you can add props to a functional component in React with TypeScript.
+
+### Step-by-Step Guide
+
+1. **Define the Props Interface**: Create an interface that defines the types of props your component will receive.
+2. **Use Props in the Component**: Use the props in your functional component by specifying the interface.
+
+### Example
+
+Let's say we want to create a `Phone` component that takes `name`, `brand`, and `price` as props.
+
+#### 1. Define the Props Interface
+
+Create an interface for the props:
+
+```typescript
+interface PhoneProps {
+  name: string;
+  brand: string;
+  price: number;
+}
+```
+
+#### 2. Use Props in the Component
+
+Use the defined props in your functional component:
+
+```typescript
+import React from 'react';
+
+const Phone: React.FC<PhoneProps> = ({ name, brand, price }) => {
+  return (
+    <div>
+      <h1>{name}</h1>
+      <p>{brand}</p>
+      <p>${price}</p>
+    </div>
+
+
+  );
+};
+
+export default Phone;
+```
+
+### Usage
+
+Now, you can use the `Phone` component and pass the required props:
+
+```typescript
+import React from 'react';
+import Phone from './components/Phone';
+
+const App: React.FC = () => {
+  return (
+    <div>
+      <Phone name="iPhone 13" brand="Apple" price={999} />
+      <Phone name="Galaxy S21" brand="Samsung" price={799} />
+    </div>
+  );
+};
+
+export default App;
+```
+
+By following these steps, you can effectively add and use props in your functional components, making them more reusable and dynamic.
+
 ## Conclusion
 
-This documentation provides an overview of the `react_phone-catalog` project structure, dependencies, development workflows, and how to use Plop to create new pages and components. By following the guidelines and using the provided scripts, you can effectively develop and maintain this React application.
+This documentation provides an overview of the `react_phone-catalog` project structure, dependencies, development workflows, and how to use Plop to create new pages and components. It also includes guidelines on how to add props to functional components in React. By following the guidelines and using the provided scripts, you can effectively develop and maintain this React application.
