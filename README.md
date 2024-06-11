@@ -12,7 +12,6 @@ This project, `react_phone-catalog`, is a React-based web application designed t
 - [Scripts](#scripts)
 - [Linting and Formatting](#linting-and-formatting)
 - [Building and Previewing](#building-and-previewing)
-- [Pre-commit Hooks](#pre-commit-hooks)
 - [TypeScript Support](#typescript-support)
 - [Using Plop](#using-plop)
 
