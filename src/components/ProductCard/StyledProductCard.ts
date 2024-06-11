@@ -201,6 +201,31 @@ export const StyledProductCard = styled.div`
     font-weight: 700;
     line-height: 21px;
     text-align: center;
+    transition: box-shadow 300ms;
+
+    &--clicked {
+      background-color: transparent;
+      color: var(--rstyle1-accent);
+      width: 175px;
+      height: 40px;
+      border-radius: 48px;
+      border: 1px solid var(--rstyle1-gray-elements);
+      text-align: center;
+      padding: 0;
+
+      //styleName: Buttons;
+      font-family: Mont;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 21px;
+      text-align: center;
+      transition: box-shadow 300ms;
+
+      &:hover {
+        cursor: pointer;
+        box-shadow: 0px 3px 13px 0px #17203166;
+      }
+    }
 
     @media (min-width: 640px) and (max-width: 1199px) {
       width: 117px;
@@ -208,6 +233,7 @@ export const StyledProductCard = styled.div`
 
     &:hover {
       cursor: pointer;
+      box-shadow: 0px 3px 13px 0px #17203166;
     }
   }
 
@@ -220,9 +246,22 @@ export const StyledProductCard = styled.div`
     border: 1px solid var(--rstyle1-gray-icons-placeholders);
     padding: 10px;
     margin: 0;
+    transition: color 500ms;
 
     &:hover {
       cursor: pointer;
+    }
+
+    &--clicked {
+      display: flex;
+      justify-content: center;
+      background-color: transparent;
+      box-sizing: border-box;
+      border-radius: 50%;
+      border: 1px solid var(--rstyle1-gray-icons-placeholders);
+      padding: 10px;
+      margin: 0;
+      color: var(--rstyle1-secondary-accent);
     }
   }
 `;

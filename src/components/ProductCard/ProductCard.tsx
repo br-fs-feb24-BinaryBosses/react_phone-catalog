@@ -12,6 +12,7 @@ interface Prop {
 
 function ProductCard({ phone }: Prop) {
   const [favorite, setFavorite] = useState(false);
+  const [addToCard, setAddToCard] = useState(false);
 
   const handleFavoriteClick = () => {
     setFavorite(!favorite);
@@ -49,12 +50,16 @@ function ProductCard({ phone }: Prop) {
               </div>
             </div>
             <div className="product-card__btn-container">
-              <button type="button" className="product-card__btn">
-                Add to cart
+              <button
+                type="button"
+                className={`product-card__btn${addToCard ? '--clicked' : ''}`}
+                onClick={() => setAddToCard(state => !state)}
+              >
+                {!addToCard ? 'Add to cart' : 'Added'}
               </button>
               <button
                 type="button"
-                className="product-card__btn-favorite"
+                className={`product-card__btn-favorite${favorite ? '--clicked' : ''}`}
                 onClick={handleFavoriteClick}
               >
                 <Icon icon={favorite ? IconType.FILLED_HEARTLIKE : IconType.EMPTY_HEARTLIKE} />
