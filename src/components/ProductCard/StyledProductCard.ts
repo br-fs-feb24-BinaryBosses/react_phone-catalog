@@ -13,7 +13,7 @@ export const StyledProductCard = styled.div`
   background-color: #fff;
   border: 1px solid #e2e6e9;
   border-radius: 8px;
-  width: 287px;
+  width: 272px;
   height: 440px;
 
   @media (min-width: 640px) and (max-width: 1199px) {
@@ -22,6 +22,8 @@ export const StyledProductCard = styled.div`
   }
 
   .product-card__link {
+    text-decoration: none;
+    color: var(--rstyle1-gray-primary);
     &:hover {
       cursor: pointer;
     }

@@ -5,10 +5,11 @@ import StyledProductSlider from './StyledProductSlider.ts';
 
 interface ProductSliderProps {
   getProducts: () => Promise<Product[]>;
+  title: string;
 }
 
 function ProductSlider(prop: ProductSliderProps): React.ReactNode {
-  const { getProducts } = prop;
+  const { getProducts, title } = prop;
 
   const [scrollIndex, setScrollIndex] = useState<number>(0);
 
@@ -40,7 +41,7 @@ function ProductSlider(prop: ProductSliderProps): React.ReactNode {
   return (
     <StyledProductSlider>
       <div className="main-container">
-        <h1>Brand New Models</h1>
+        <h1>{title}</h1>
         <div className="nav-buttons">
           <button
             onClick={handlePrev}
@@ -66,7 +67,7 @@ function ProductSlider(prop: ProductSliderProps): React.ReactNode {
           >
             {products.map(item => (
               <div className="slider_slide">
-                <ProductCard key={item.id} product={item.name} />
+                <ProductCard key={item.id} product={item} />
               </div>
             ))}
           </div>

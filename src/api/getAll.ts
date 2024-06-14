@@ -1,35 +1,7 @@
-import { Accessorie, Phone, Product, Tablet } from '../types/types.ts';
-
-export const getAccessories = (): Promise<Accessorie[]> => {
-  return fetch('api/accessories.json')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Failed to fetch accessories: ${response.statusText}`);
-      }
-      return response.json();
-    })
-    .then(data => data as Accessorie[])
-    .catch(error => {
-      throw error;
-    });
-};
-
-export const getPhones = (): Promise<Phone[]> => {
-  return fetch('api/phones.json')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Failed to fetch phones: ${response.statusText}`);
-      }
-      return response.json();
-    })
-    .then(data => data as Phone[])
-    .catch(error => {
-      throw error;
-    });
-};
+import { FullProduct, Product } from '../types/types.ts';
 
 export const getProducts = (): Promise<Product[]> => {
-  return fetch('api/products.json')
+  return fetch('/api/products.json')
     .then(response => {
       if (!response.ok) {
         throw new Error(`Failed to fetch products: ${response.statusText}`);
@@ -43,7 +15,7 @@ export const getProducts = (): Promise<Product[]> => {
 };
 
 export const getBrandNewModels = (): Promise<Product[]> => {
-  return fetch('api/brandNewModels.json')
+  return fetch('/api/brandNewModels.json')
     .then(response => {
       if (!response.ok) {
         throw new Error(`Failed to fetch products: ${response.statusText}`);
@@ -57,7 +29,7 @@ export const getBrandNewModels = (): Promise<Product[]> => {
 };
 
 export const getHotPrices = (): Promise<Product[]> => {
-  return fetch('api/hotPrices.json')
+  return fetch('/api/hotPrices.json')
     .then(response => {
       if (!response.ok) {
         throw new Error(`Failed to fetch products: ${response.statusText}`);
@@ -71,7 +43,7 @@ export const getHotPrices = (): Promise<Product[]> => {
 };
 
 export const getYouMayAlsoLike = (): Promise<Product[]> => {
-  return fetch('api/youMayAlsoLike.json')
+  return fetch('/api/youMayAlsoLike.json')
     .then(response => {
       if (!response.ok) {
         throw new Error(`Failed to fetch products: ${response.statusText}`);
@@ -84,15 +56,16 @@ export const getYouMayAlsoLike = (): Promise<Product[]> => {
     });
 };
 
-export const getTablets = (): Promise<Tablet[]> => {
-  return fetch('api/tablets.json')
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const getProductByID = (_ID: string | undefined): Promise<FullProduct> => {
+  return fetch('/api/mockProduct.json')
     .then(response => {
       if (!response.ok) {
-        throw new Error(`Failed to fetch tablets: ${response.statusText}`);
+        throw new Error(`Failed to fetch products: ${response.statusText}`);
       }
       return response.json();
     })
-    .then(data => data as Tablet[])
+    .then(data => data as FullProduct)
     .catch(error => {
       throw error;
     });
