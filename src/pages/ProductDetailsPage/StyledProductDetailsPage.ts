@@ -249,6 +249,9 @@ const StyledProductDetailsPage = styled.div`
         &--spaceblack {
           background-color: #3e3c3b;
         }
+        &--skyblue {
+          background-color: #b2c4d2;
+        }
       }
 
       &-capacity {

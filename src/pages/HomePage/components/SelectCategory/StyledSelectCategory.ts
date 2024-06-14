@@ -4,11 +4,13 @@ import {
   letterStyleH4DesktoAndTable,
 } from '../../../../styles/GlobalStyles.ts';
 
-const StyledSelectCategory = styled.div`
+const StyledSelectCategory = styled.a`
   margin: 0;
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  text-decoration: none;
+  color: black;
 
   @media (min-width: 640px) {
     width: 100%;

@@ -71,6 +71,16 @@ function HomePage() {
     });
   }, []);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentIndex(prevIndex => (prevIndex === images.length - 1 ? 0 : prevIndex + 1));
+    }, 3000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [images.length]);
+
   const handlePrev = () => {
     setCurrentIndex(prevIndex => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
   };

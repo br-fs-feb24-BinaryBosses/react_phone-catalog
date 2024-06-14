@@ -11,9 +11,32 @@ import StyledProductDetailsPage from './StyledProductDetailsPage.ts';
 import { FullProduct } from '../../types/types.ts';
 import { getProductByID } from '../../api/getAll.ts';
 
+import phonesJson from '../../../public/api/phones.json';
+import tabletJson from '../../../public/api/tablets.json';
+import accessoriesJson from '../../../public/api/accessories.json';
+import products from '../../../public/api/products.json';
+
 /*
   StyledBackHomeButton - Line 130 to 133 - probably will be a global component
 */
+
+function checkCategoryProduct(category: string, itemId: string) {
+  if (category === 'phones') {
+    return phonesJson.find(phone => phone.id === itemId) || null;
+  }
+  if (category === 'accessories') {
+    return accessoriesJson.find(accessorie => accessorie.id === itemId) || null;
+  }
+  if (category === 'tablets') {
+    return tabletJson.find(tablet => tablet.id === itemId) || null;
+  }
+  return null;
+}
+
+const fullProducts = products.map(el => ({
+  ...el,
+  product: checkCategoryProduct(el.category, el.itemId),
+}));
 
 type Favorites = {
   id: string;
@@ -25,11 +48,15 @@ type Selected = {
   isSelected: boolean;
 };
 
+function testGetProductsByID(id: string | undefined) {
+  return fullProducts.find(prodct => prodct.itemId === id)?.product || null;
+}
+
 function ProductDetailsPage() {
-  const [selectImg, SetSelectImg] = useState<string>('');
-  const [product, SetProduct] = useState<FullProduct | null>(null);
-  const [color, SetColor] = useState<string>('');
-  const [capacity, SetCapacity] = useState<string>('');
+  const [selectImg, SetSelectImg] = useState<string | undefined>('');
+  const [product, SetProduct] = useState<FullProduct | null | undefined>(null);
+  const [color, SetColor] = useState<string | undefined>('');
+  const [capacity, SetCapacity] = useState<string | undefined>('');
   const [favorites, SetFavorites] = useState<Favorites[]>([]);
   const [selected, Setselected] = useState<Selected[]>([]);
 
@@ -37,7 +64,10 @@ function ProductDetailsPage() {
   const { category } = useParams();
   const navigate = useNavigate();
 
-  function handleCategoryId(categoryID: string | undefined, element: FullProduct | null) {
+  function handleCategoryId(
+    categoryID: string | undefined,
+    element: FullProduct | null | undefined,
+  ) {
     const splitedCategory = categoryID?.split('-');
 
     if (splitedCategory && element) {
@@ -59,14 +89,26 @@ function ProductDetailsPage() {
 
   useEffect(() => {
     if (!product) {
-      getProductByID(categoryId).then(res => {
-        SetProduct(res);
-        SetCapacity(res.capacity);
-        SetColor(res.color);
-        SetSelectImg(res.images[0]);
+      //   getProductByID(categoryId).then(res => {
+      //     SetProduct(res);
+      //     SetCapacity(res.capacity);
+      //     SetColor(res.color);
+      //     SetSelectImg(res.images[0]);
 
-        navigate(`/shop/${category}/${res.id}`, { replace: true });
-      });
+      //     navigate(`/shop/${category}/${res.id}`, { replace: true });
+      //   });
+      // }
+      const res = testGetProductsByID(categoryId);
+      if (res) {
+        SetProduct(res);
+        SetCapacity(res?.capacity);
+        SetColor(res?.color);
+        SetSelectImg(res?.images[0]);
+
+        navigate(`/shop/${category}/${res?.id}`, {
+          replace: true,
+        });
+      }
     }
   }, [category, categoryId, navigate, product]);
 
@@ -74,15 +116,30 @@ function ProductDetailsPage() {
     SetSelectImg('');
     SetColor(col);
 
-    getProductByID(
-      `${handleCategoryId(categoryId, product)}-${capacity.toLowerCase()}-${col}`,
-    ).then(res => {
-      SetProduct(res);
-      SetCapacity(res.capacity);
-      SetColor(res.color);
-      SetSelectImg(res.images[0]);
+    if (!capacity) {
+      return;
+    }
 
-      navigate(`/shop/${category}/${res.id}`, { replace: true });
+    const newId = `${handleCategoryId(categoryId, product)}-${capacity.toLowerCase()}-${col}`;
+
+    // getProductByID(
+    //   `${handleCategoryId(categoryId, product)}-${capacity.toLowerCase()}-${col}`,
+    // ).then(res => {
+    //   SetProduct(res);
+    //   SetCapacity(res.capacity);
+    //   SetColor(res.color);
+    //   SetSelectImg(res.images[0]);
+
+    //   navigate(`/shop/${category}/${res.id}`, { replace: true });
+    // });
+
+    SetProduct(testGetProductsByID(newId));
+    SetCapacity(testGetProductsByID(newId)?.capacity);
+    SetColor(testGetProductsByID(newId)?.color);
+    SetSelectImg(testGetProductsByID(newId)?.images[0]);
+
+    navigate(`/shop/${category}/${testGetProductsByID(newId)?.id}`, {
+      replace: true,
     });
   }
 
@@ -90,16 +147,27 @@ function ProductDetailsPage() {
     SetSelectImg('');
     SetCapacity(capac);
 
-    getProductByID(`${handleCategoryId(categoryId, product)}-${capac.toLowerCase()}-${color}`).then(
-      res => {
-        SetProduct(res);
-        SetCapacity(res.capacity);
-        SetColor(res.color);
-        SetSelectImg(res.images[0]);
+    const newId = `${handleCategoryId(categoryId, product)}-${capac.toLowerCase()}-${color}`;
 
-        navigate(`/shop/${category}/${res.id}`, { replace: true });
-      },
-    );
+    // getProductByID(`${handleCategoryId(categoryId, product)}-${capac.toLowerCase()}-${color}`).then(
+    //   res => {
+    //     SetProduct(res);
+    //     SetCapacity(res.capacity);
+    //     SetColor(res.color);
+    //     SetSelectImg(res.images[0]);
+
+    //     navigate(`/shop/${category}/${res.id}`, { replace: true });
+    //   },
+    // );
+
+    SetProduct(testGetProductsByID(newId));
+    SetCapacity(testGetProductsByID(newId)?.capacity);
+    SetColor(testGetProductsByID(newId)?.color);
+    SetSelectImg(testGetProductsByID(newId)?.images[0]);
+
+    navigate(`/shop/${category}/${testGetProductsByID(newId)?.id}`, {
+      replace: true,
+    });
   }
 
   function handleFavorites(id: string | undefined): void {

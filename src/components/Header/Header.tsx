@@ -23,11 +23,11 @@ function Header({ activeMenu, setActiveMenu }: Props): React.ReactNode {
           <img id="logo" src="/img/icons/logo.png" alt="Logo" />
         </div>
         <div className="nav_links">
-          <a href="/" className="nav_link">
+          <NavLink to="/" className="nav_link">
             {' '}
             {/* exist a active class in this class adjust  */}
             Home
-          </a>
+          </NavLink>
           <NavLink className="nav_link" to="/shop/phones">
             Phones
           </NavLink>

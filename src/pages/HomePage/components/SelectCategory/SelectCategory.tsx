@@ -11,7 +11,7 @@ function SelectCategory(props: CategoryProps): JSX.Element {
   const { images, name, amount } = props;
 
   return (
-    <StyledSelectCategory className="category">
+    <StyledSelectCategory className="category" href={`/shop/${name.toLowerCase()}`}>
       <img className="category__image" src={images} alt={name} />
       <div className="category__name">{`${name}`}</div>
       <div className="category__amount">{`${amount} models`}</div>
