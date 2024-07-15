@@ -10,6 +10,17 @@ import {
 } from '../../styles/GlobalStyles.ts';
 
 const StyledProductDetailsPage = styled.div`
+  margin-inline: 16px;
+
+  @media (min-width: 640px) {
+    margin-inline: 24px;
+  }
+
+  @media (min-width: 1200px) {
+    max-width: 1136px;
+    margin: 0 auto;
+  }
+
   .product-details-page {
     &__title {
       margin: 0;
@@ -167,6 +178,7 @@ const StyledProductDetailsPage = styled.div`
 
       &-colors {
         display: flex;
+        flex-wrap: wrap;
         gap: 8px;
         margin-bottom: 24px;
       }
@@ -268,6 +280,7 @@ const StyledProductDetailsPage = styled.div`
 
         &-memo {
           display: flex;
+          flex-wrap: wrap;
           gap: 8px;
 
           &-option {

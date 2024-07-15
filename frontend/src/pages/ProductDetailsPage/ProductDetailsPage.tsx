@@ -15,10 +15,6 @@ import { addProduct } from '../../context/cartContext/cartSlice.ts';
 import { addFavourite, removeFavourite } from '../../context/favoriteContext/favouriteSlice.ts';
 import ProductSlider from '../../components/ProductSlider/ProductSlider.tsx';
 
-/*
-  StyledBackHomeButton - Line 130 to 133 - probably will be a global component
-*/
-
 function checkCategoryProduct(category: string, itemId: string) {
   if (category === 'phones') {
     return phonesJson.find(phone => phone.id === itemId) || null;

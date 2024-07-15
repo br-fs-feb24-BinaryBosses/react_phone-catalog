@@ -6,20 +6,14 @@ export const StyledProductSlider = styled.div`
   max-width: 1180px; /* 4 cards x 210px each (200px width + 10px margin) */
   overflow: hidden;
   padding-top: 40px;
+  width: 100%;
 
   .product-slider__title-and-buttons {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     gap: 30vw;
     margin: 0 16px 24px;
-
-    @media (min-width: 640px) and (max-width: 1199px) {
-      justify-content: space-between;
-    }
-    @media (min-width: 1200px) {
-      justify-content: space-between;
-    }
   }
 
   .product-slider__title {
