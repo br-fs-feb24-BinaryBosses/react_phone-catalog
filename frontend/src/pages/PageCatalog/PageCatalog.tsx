@@ -1,5 +1,3 @@
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable consistent-return */
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -35,6 +33,19 @@ const itemsPerPageOptions = [
   { label: 'All', value: 'all' },
 ];
 
+function sortProducts(products: Product[], sortBy: string): Product[] {
+  switch (sortBy) {
+    case 'newest':
+      return products.sort((a, b) => new Date(b.year).getTime() - new Date(a.year).getTime());
+    case 'alphabetically':
+      return products.sort((a, b) => a.name.localeCompare(b.name));
+    case 'cheapest':
+      return products.sort((a, b) => a.price - b.price);
+    default:
+      return products;
+  }
+}
+
 function PageCatalog(): React.ReactNode {
   const { category } = useParams<{ category?: string }>();
   const [quantityPerPage, setQuantityPerPage] = useState<SelectOptions | string>('4');
@@ -50,6 +61,47 @@ function PageCatalog(): React.ReactNode {
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
+
+  function handleSetProducts(data: Product[]) {
+    const filteredData = data.filter(e => e.category === category);
+    const sortedData = sortProducts(filteredData, sortOption);
+    const paginatedData = sortedData.slice(
+      (pageNumber - 1) * Number(quantityPerPage),
+      pageNumber * Number(quantityPerPage),
+    );
+
+    if (quantityPerPage === 'all') {
+      setContentPage(sortedData);
+    } else {
+      setContentPage(paginatedData);
+    }
+
+    return sortedData;
+  }
+
+  useEffect(() => {
+    const capitalizedCategory = category!.charAt(0).toUpperCase() + category!.slice(1);
+
+    setIsLoading(true);
+
+    getProducts()
+      .then(fetchedData => {
+        setRenderedData(handleSetProducts(fetchedData));
+      })
+      .catch(() => {
+        toast.error(`Error loading ${capitalizedCategory}...`, {
+          position: 'top-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeButton: false,
+        });
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category]);
 
   useEffect(() => {
     setPageNumber(1);
@@ -147,75 +199,16 @@ function PageCatalog(): React.ReactNode {
     if (contentPage.length !== 0) {
       setButtonsNumber([]);
 
-      const tryToChangeToNumber = Number(quantityPerPage);
+      handleSetProducts(renderedData);
 
-      if (Number.isNaN(tryToChangeToNumber)) {
-        setContentPage(renderedData);
-        return;
-      }
       const possiblePerPage = Math.ceil(renderedData.length / Number(quantityPerPage));
 
-      const newArr = [];
-      let cont = 0;
-
       for (let i = 0; i < possiblePerPage; i += 1) {
-        newArr.push(renderedData.slice(cont, Number(quantityPerPage) + cont));
-        cont += Number(quantityPerPage);
-
         setButtonsNumber(state => [...state, i + 1]);
       }
-
-      setContentPage(newArr[pageNumber - 1]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageNumber, quantityPerPage, renderedData]);
-
-  function sortProducts(products: Product[], sortBy: string): Product[] {
-    switch (sortBy) {
-      case 'newest':
-        return products.sort((a, b) => new Date(b.year).getTime() - new Date(a.year).getTime());
-      case 'alphabetically':
-        return products.sort((a, b) => a.name.localeCompare(b.name));
-      case 'cheapest':
-        return products.sort((a, b) => a.price - b.price);
-      default:
-        return products;
-    }
-  }
-
-  useEffect(() => {
-    const capitalizedCategory = category!.charAt(0).toUpperCase() + category!.slice(1);
-    setIsLoading(true);
-    getProducts()
-      .then(fetchedData => {
-        const filteredData = fetchedData.filter(e => e.category === category);
-        const sortedData = sortProducts(filteredData, sortOption);
-        const paginatedData = sortedData.slice(
-          (pageNumber - 1) * Number(quantityPerPage),
-          pageNumber * Number(quantityPerPage),
-        );
-
-        setRenderedData(sortedData);
-
-        if (quantityPerPage === 'all') {
-          setContentPage(sortedData);
-        }
-        setContentPage(paginatedData);
-      })
-      .catch(() => {
-        toast.error(`Error loading ${capitalizedCategory}...`, {
-          position: 'top-right',
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeButton: false,
-        });
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, sortOption]);
+  }, [sortOption, pageNumber, quantityPerPage, renderedData]);
 
   if (category !== 'phones' && category !== 'tablets' && category !== 'accessories') {
     navigate(`/not-found`, { replace: true });
@@ -238,24 +231,27 @@ function PageCatalog(): React.ReactNode {
       <div className="select">
         <div className="select__wrapper">
           <h1 className="select__label">Sort By</h1>
-          <Dropdown
-            options={sortOptions}
-            onChange={value => {
-              navigate(`?sortBy=${value}&itemsPerPage=${quantityPerPage}&page=${1}`);
-            }}
-            currentValue={sortOption}
-          />
+          {!isLoading && (
+            <Dropdown
+              options={sortOptions}
+              onChange={value => {
+                navigate(`?sortBy=${value}&itemsPerPage=${quantityPerPage}&page=${1}`);
+              }}
+              currentValue={sortOption}
+            />
+          )}
         </div>
         <div className="select__wrapper">
           <h1 className="select__label">Items on page</h1>
-
-          <Dropdown
-            options={itemsPerPageOptions}
-            onChange={(value: string) => {
-              navigate(`?sortBy=${sortOption}&itemsPerPage=${value}&page=${1}`);
-            }}
-            currentValue={quantityPerPage}
-          />
+          {!isLoading && (
+            <Dropdown
+              options={itemsPerPageOptions}
+              onChange={(value: string) => {
+                navigate(`?sortBy=${sortOption}&itemsPerPage=${value}&page=${1}`);
+              }}
+              currentValue={quantityPerPage}
+            />
+          )}
         </div>
       </div>
       <div className="list">
