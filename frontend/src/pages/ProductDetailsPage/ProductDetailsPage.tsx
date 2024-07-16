@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import Icon from '../../components/Icon/Icon.tsx';
 import { IconType } from '../../components/Icon/Icon.ts';
@@ -59,6 +60,7 @@ function ProductDetailsPage() {
   const [favorites, SetFavorites] = useState<Favorites[]>([]);
   const [selected, Setselected] = useState<Selected[]>([]);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const { categoryId } = useParams();
   const { category } = useParams();
@@ -241,7 +243,9 @@ function ProductDetailsPage() {
 
           <article className="product-details-page__variants">
             <div className="product-details-page__variants-head-colors">
-              <p className="product-details-page__variants-head-colors-title">Available colors</p>
+              <p className="product-details-page__variants-head-colors-title">
+                {t('detailsColorSelection')}
+              </p>
               <p className="product-details-page__variants-head-colors-id">ID: 802390</p>
             </div>
 
@@ -258,7 +262,9 @@ function ProductDetailsPage() {
             </div>
 
             <div className="product-details-page__variants-capacity">
-              <p className="product-details-page__variants-capacity-title">Select capacity</p>
+              <p className="product-details-page__variants-capacity-title">
+                {t('detailsCapacitySelection')}
+              </p>
               <div className="product-details-page__variants-capacity-memo">
                 {product?.capacityAvailable.map(capacit => (
                   <button
@@ -293,9 +299,9 @@ function ProductDetailsPage() {
                   disabled={selected[0]?.isSelected}
                 >
                   {selected.find(el => el.id === product?.id && el.isSelected) ? (
-                    <>Added to cart</>
+                    <>{t('added')}</>
                   ) : (
-                    <>Add to cart</>
+                    <>{t('addToCart')}</>
                   )}
                 </button>
                 <button
@@ -316,7 +322,7 @@ function ProductDetailsPage() {
             <div className="product-details-page__variants-informations">
               <div className="product-details-page__variants-informations-card">
                 <p className="product-details-page__variants-informations-card-especification">
-                  Screen
+                  {t('screen')}
                 </p>
                 <p className="product-details-page__variants-informations-card-value">
                   {product?.screen}
@@ -324,7 +330,7 @@ function ProductDetailsPage() {
               </div>
               <div className="product-details-page__variants-informations-card">
                 <p className="product-details-page__variants-informations-card-especification">
-                  Resolution
+                  {t('capacity')}
                 </p>
                 <p className="product-details-page__variants-informations-card-value">
                   {product?.resolution}
@@ -332,7 +338,7 @@ function ProductDetailsPage() {
               </div>
               <div className="product-details-page__variants-informations-card">
                 <p className="product-details-page__variants-informations-card-especification">
-                  Processor
+                  {t('processor')}
                 </p>
                 <p className="product-details-page__variants-informations-card-value">
                   {product?.processor}
@@ -340,7 +346,7 @@ function ProductDetailsPage() {
               </div>
               <div className="product-details-page__variants-informations-card">
                 <p className="product-details-page__variants-informations-card-especification">
-                  RAM
+                  {t('RAM')}
                 </p>
                 <p className="product-details-page__variants-informations-card-value">
                   {product?.ram}
@@ -352,14 +358,14 @@ function ProductDetailsPage() {
 
         <section className="product-details-page__details">
           <article className="product-details-page__details-about">
-            <h3 className="product-details-page__details-about-title">About</h3>
+            <h3 className="product-details-page__details-about-title">{t('detailsAbout')}</h3>
             <div className="product-details-page__details-about-contents">
               {product?.description?.map(desc => (
                 <div key={desc.title} className="product-details-page__details-about-content">
-                  <h4 className="product-details-page__details-about-header">{desc.title}</h4>
+                  <h4 className="product-details-page__details-about-header">{t(desc.title)}</h4>
                   {desc.text.map(txt => (
                     <p key={txt} className="product-details-page__details-about-description">
-                      {txt}
+                      {t(txt)}
                     </p>
                   ))}
                 </div>
@@ -367,10 +373,10 @@ function ProductDetailsPage() {
             </div>
           </article>
           <article className="product-details-page__details-techs">
-            <h3 className="product-details-page__details-techs-title">Tech specs</h3>
+            <h3 className="product-details-page__details-techs-title">{t('techSpecs')}</h3>
             <div className="product-details-page__details-techs-information">
               <p className="product-details-page__details-techs-information-especifications">
-                Screen
+                {t('screen')}
               </p>
               <p className="product-details-page__details-techs-information-value">
                 {product?.screen}
@@ -378,7 +384,7 @@ function ProductDetailsPage() {
             </div>
             <div className="product-details-page__details-techs-information">
               <p className="product-details-page__details-techs-information-especifications">
-                Resolution
+                {t('resolution')}
               </p>
               <p className="product-details-page__details-techs-information-value">
                 {product?.resolution}
@@ -386,7 +392,7 @@ function ProductDetailsPage() {
             </div>
             <div className="product-details-page__details-techs-information">
               <p className="product-details-page__details-techs-information-especifications">
-                Processor
+                {t('processor')}
               </p>
               <p className="product-details-page__details-techs-information-value">
                 {product?.processor}
@@ -400,7 +406,7 @@ function ProductDetailsPage() {
             </div>
             <div className="product-details-page__details-techs-information">
               <p className="product-details-page__details-techs-information-especifications">
-                Built in memory
+                {t('capacity')}
               </p>
               <p className="product-details-page__details-techs-information-value">
                 {product?.capacity}
@@ -409,7 +415,7 @@ function ProductDetailsPage() {
             {product?.camera && (
               <div className="product-details-page__details-techs-information">
                 <p className="product-details-page__details-techs-information-especifications">
-                  Camera
+                  {t('camera')}
                 </p>
                 <p className="product-details-page__details-techs-information-value">
                   {product?.camera}
@@ -420,7 +426,7 @@ function ProductDetailsPage() {
             {product?.zoom && (
               <div className="product-details-page__details-techs-information">
                 <p className="product-details-page__details-techs-information-especifications">
-                  Zoom
+                  {t('zoom')}
                 </p>
                 <p className="product-details-page__details-techs-information-value">
                   {product?.zoom}
@@ -430,7 +436,7 @@ function ProductDetailsPage() {
 
             <div className="product-details-page__details-techs-information">
               <p className="product-details-page__details-techs-information-especifications">
-                Cell
+                {t('cell')}
               </p>
               <p className="product-details-page__details-techs-information-value">
                 {product?.cell.join(', ')}
@@ -439,7 +445,7 @@ function ProductDetailsPage() {
           </article>
         </section>
       </StyledProductDetailsPage>
-      <ProductSlider title="You may also like!" getProducts={getProducts} sortBy="newest" />
+      <ProductSlider title={t('recommendation')} getProducts={getProducts} sortBy="newest" />
     </>
   );
 }

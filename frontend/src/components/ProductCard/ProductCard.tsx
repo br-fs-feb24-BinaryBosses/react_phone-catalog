@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { StyledProductCard } from './StyledProductCard.ts';
 import { Product } from '../../types/types.ts';
 import { addProduct } from '../../context/cartContext/cartSlice.ts';
@@ -22,6 +23,7 @@ function ProductCard({ product }: Prop): React.ReactNode {
   const dispatch = useDispatch();
   const [favorite, setFavorite] = useState(isFavoriteProduct);
   const [addToCardOrNot, setAddToCardOrNot] = useState(productIsInCart);
+  const { t } = useTranslation();
 
   const handleAddProductToCartClickButton = () => {
     dispatch(addProduct(product));
@@ -46,23 +48,23 @@ function ProductCard({ product }: Prop): React.ReactNode {
           <div className="product-card__description">
             <h4 className="product-card__description-title">{product.name}</h4>
             <div className="product-card__description-price-wrapper">
-              <h3 className="product-card__description-price-discount">{`$${product.price}`}</h3>
-              <h3 className="product-card__description-price">{`$${product.fullPrice}`}</h3>
+              <h3 className="product-card__description-price-discount">{`${t('$')}${product.price}`}</h3>
+              <h3 className="product-card__description-price">{`${t('$')}${product.fullPrice}`}</h3>
             </div>
           </div>
           <hr className="product-card__custom-line" />
           <div className="product-card__details">
             <div className="product-card__details-container">
               <div className="product-card__details-screen">
-                <span className="product-card__details-title">Screen</span>
+                <span className="product-card__details-title">{t('screen')}</span>
                 <span className="product-card__details-description">{product.screen}</span>
               </div>
               <div className="product-card__details-capacity">
-                <span className="product-card__details-title">Capacity</span>
+                <span className="product-card__details-title">{t('capacity')}</span>
                 <span className="product-card__details-description">{product.capacity}</span>
               </div>
               <div className="product-card__details-ram">
-                <span className="product-card__details-title">RAM</span>
+                <span className="product-card__details-title">{t('RAM')}</span>
                 <span className="product-card__details-description">{product.ram}</span>
               </div>
             </div>
@@ -75,7 +77,7 @@ function ProductCard({ product }: Prop): React.ReactNode {
             onClick={handleAddProductToCartClickButton}
             disabled={addToCardOrNot}
           >
-            {addToCardOrNot ? 'Added' : 'Add to cart'}
+            {addToCardOrNot ? t('added') : t('addToCart')}
           </button>
           <button
             type="button"

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getProducts } from '../../api/getAll.ts';
 import ProductSlider from '../../components/ProductSlider/ProductSlider.tsx';
 import StyledHomePage from './StyledHomePage.ts';
@@ -13,6 +14,7 @@ interface Category {
 
 function HomePage(): React.ReactNode {
   const [categories, setCategories] = useState<{ [key: string]: Category }>({});
+  const { t } = useTranslation();
 
   useEffect(() => {
     getProducts().then(products => {
@@ -37,13 +39,13 @@ function HomePage(): React.ReactNode {
 
   return (
     <StyledHomePage className="home-page">
-      <h1 className="home-page__title">Welcome to Nice Gadgets store!</h1>
+      <h1 className="home-page__title">{t('welcome')}</h1>
       <Banner />
       <div className="home-page__sliders-container">
-        <ProductSlider title="Brand New Models" getProducts={getProducts} sortBy="newest" />
+        <ProductSlider title={t('brandNewModels')} getProducts={getProducts} sortBy="newest" />
       </div>
       <div className="home-page__shop">
-        <div className="home-page__shop-title">Shop by category</div>
+        <div className="home-page__shop-title">{t('shopByCategory')}</div>
         <div className="home-page__shop-container">
           {Object.values(categories).map(category => (
             <SelectCategory
@@ -56,7 +58,7 @@ function HomePage(): React.ReactNode {
         </div>
       </div>
       <div className="home-page__sliders-container">
-        <ProductSlider title="Hot prices" getProducts={getProducts} sortBy="cheapest" />
+        <ProductSlider title={t('hotPrices')} getProducts={getProducts} sortBy="cheapest" />
       </div>
     </StyledHomePage>
   );

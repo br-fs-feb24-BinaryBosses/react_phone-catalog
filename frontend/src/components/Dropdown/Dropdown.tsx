@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from '../Icon/Icon.tsx';
 import { IconType } from '../Icon/Icon.ts';
 import StyledDropdown from './StyledDropdown.ts';
@@ -12,6 +13,7 @@ type DropdownProps = {
 function Dropdown({ options, onChange, currentValue }: DropdownProps): React.ReactNode {
   const [selectedValue, setSelectedValue] = useState(currentValue.toString());
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
 
   function handleOptionClick(value: string) {
     setSelectedValue(value);
@@ -33,7 +35,7 @@ function Dropdown({ options, onChange, currentValue }: DropdownProps): React.Rea
         aria-label="dropdown select device"
       >
         <span className="dropdown-select__display-title">
-          {options.find(option => option.value === selectedValue)?.label}
+          {t(options.find(option => option.value === selectedValue)?.label || '')}
         </span>
         <Icon icon={isOpen ? IconType.ARROW_UP : IconType.ARROW_DOWN} />
       </button>
@@ -47,7 +49,7 @@ function Dropdown({ options, onChange, currentValue }: DropdownProps): React.Rea
               className="dropdown-select__option"
               onClick={() => handleOptionClick(option.value)}
             >
-              {option.label}
+              {t(option.label)}
             </button>
           ))}
         </div>
