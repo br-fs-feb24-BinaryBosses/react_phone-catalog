@@ -151,6 +151,7 @@ function PageCatalog(): React.ReactNode {
 
       if (Number.isNaN(tryToChangeToNumber)) {
         setContentPage(renderedData);
+        return;
       }
       const possiblePerPage = Math.ceil(renderedData.length / Number(quantityPerPage));
 
