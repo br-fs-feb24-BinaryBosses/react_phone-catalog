@@ -40,7 +40,7 @@ function sortProducts(products: Product[], sortBy: string): Product[] {
     case 'alphabetically':
       return products.sort((a, b) => a.name.localeCompare(b.name));
     case 'cheapest':
-      return products.sort((a, b) => a.price - b.price);
+      return products.sort((a, b) => a.priceDiscount - b.priceDiscount);
     default:
       return products;
   }
@@ -214,7 +214,7 @@ function PageCatalog(): React.ReactNode {
     navigate(`/not-found`, { replace: true });
   }
 
-  if (renderedData.length === 0 && isLoading) {
+  if (isLoading) {
     return <h1>Loading</h1>;
   }
 
@@ -222,97 +222,97 @@ function PageCatalog(): React.ReactNode {
 
   return (
     <StyledPageCatalog className="page-catalog">
-      <Breadcrumb />
-      <StyledToastContainer />
-      <div className="top-section">
-        <h1 className="top-section__title">{categoryTitle}</h1>
-        <h2 className="top-section__subtitle">{renderedData.length} models</h2>
-      </div>
-      <div className="select">
-        <div className="select__wrapper">
-          <h1 className="select__label">Sort By</h1>
-          {!isLoading && (
-            <Dropdown
-              options={sortOptions}
-              onChange={value => {
-                navigate(`?sortBy=${value}&itemsPerPage=${quantityPerPage}&page=${1}`);
+      {!isLoading && (
+        <>
+          <Breadcrumb />
+          <StyledToastContainer />
+          <div className="top-section">
+            <h1 className="top-section__title">{categoryTitle}</h1>
+            <h2 className="top-section__subtitle">{renderedData.length} models</h2>
+          </div>
+          <div className="select">
+            <div className="select__wrapper">
+              <h1 className="select__label">Sort By</h1>
+              <Dropdown
+                options={sortOptions}
+                onChange={value => {
+                  navigate(`?sortBy=${value}&itemsPerPage=${quantityPerPage}&page=${1}`);
+                }}
+                currentValue={sortOption}
+              />
+            </div>
+            <div className="select__wrapper">
+              <h1 className="select__label">Items on page</h1>
+
+              <Dropdown
+                options={itemsPerPageOptions}
+                onChange={(value: string) => {
+                  navigate(`?sortBy=${sortOption}&itemsPerPage=${value}&page=${1}`);
+                }}
+                currentValue={quantityPerPage}
+              />
+            </div>
+          </div>
+          <div className="list">
+            {contentPage && contentPage.map(item => <ProductCard key={item.id} product={item} />)}
+          </div>
+          <div className="pagination">
+            <button
+              type="button"
+              className={`pagination__button pagination__button--isarrow ${pageNumber === 1 || quantityPerPage === 'all' ? 'pagination__button--hidden' : ''}`}
+              onClick={() => {
+                setPageNumber(state => {
+                  const newPage = state - 1;
+
+                  queryParams.set('page', String(newPage));
+
+                  navigate({ search: queryParams.toString() });
+                  return newPage;
+                });
               }}
-              currentValue={sortOption}
-            />
-          )}
-        </div>
-        <div className="select__wrapper">
-          <h1 className="select__label">Items on page</h1>
-          {!isLoading && (
-            <Dropdown
-              options={itemsPerPageOptions}
-              onChange={(value: string) => {
-                navigate(`?sortBy=${sortOption}&itemsPerPage=${value}&page=${1}`);
-              }}
-              currentValue={quantityPerPage}
-            />
-          )}
-        </div>
-      </div>
-      <div className="list">
-        {contentPage && contentPage.map(item => <ProductCard key={item.id} product={item} />)}
-      </div>
+            >
+              &lt;
+            </button>
 
-      <div className="pagination">
-        <button
-          type="button"
-          className={`pagination__button pagination__button--isarrow ${pageNumber === 1 || quantityPerPage === 'all' ? 'pagination__button--hidden' : ''}`}
-          onClick={() => {
-            setPageNumber(state => {
-              const newPage = state - 1;
+            {fourButtons.map(number => (
+              <button
+                key={number}
+                type="button"
+                className={`pagination__button ${pageNumber === number ? 'pagination__button--filled' : ''}`}
+                onClick={() =>
+                  setPageNumber(() => {
+                    const newPage = number;
 
-              queryParams.set('page', String(newPage));
+                    queryParams.set('page', String(newPage));
 
-              navigate({ search: queryParams.toString() });
-              return newPage;
-            });
-          }}
-        >
-          &lt;
-        </button>
+                    navigate({ search: queryParams.toString() });
+                    return newPage;
+                  })
+                }
+              >
+                {number}
+              </button>
+            ))}
 
-        {fourButtons.map(number => (
-          <button
-            key={number}
-            type="button"
-            className={`pagination__button ${pageNumber === number ? 'pagination__button--filled' : ''}`}
-            onClick={() =>
-              setPageNumber(() => {
-                const newPage = number;
+            <button
+              type="button"
+              className={`pagination__button pagination__button--isarrow ${pageNumber === buttonsNumber.length || quantityPerPage === 'all' ? 'pagination__button--hidden' : ''}`}
+              onClick={() =>
+                setPageNumber(state => {
+                  const newPage = state + 1;
 
-                queryParams.set('page', String(newPage));
+                  queryParams.set('page', String(newPage));
 
-                navigate({ search: queryParams.toString() });
-                return newPage;
-              })
-            }
-          >
-            {number}
-          </button>
-        ))}
-
-        <button
-          type="button"
-          className={`pagination__button pagination__button--isarrow ${pageNumber === buttonsNumber.length || quantityPerPage === 'all' ? 'pagination__button--hidden' : ''}`}
-          onClick={() =>
-            setPageNumber(state => {
-              const newPage = state + 1;
-
-              queryParams.set('page', String(newPage));
-
-              navigate({ search: queryParams.toString() });
-              return newPage;
-            })
-          }
-        >
-          &gt;
-        </button>
-      </div>
+                  navigate({ search: queryParams.toString() });
+                  return newPage;
+                })
+              }
+            >
+              &gt;
+            </button>
+          </div>
+        </>
+      )}
     </StyledPageCatalog>
   );
 }

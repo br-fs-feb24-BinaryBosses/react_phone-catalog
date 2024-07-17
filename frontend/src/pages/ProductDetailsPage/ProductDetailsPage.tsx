@@ -3,14 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Icon from '../../components/Icon/Icon.tsx';
 import { IconType } from '../../components/Icon/Icon.ts';
 import StyledProductDetailsPage from './StyledProductDetailsPage.ts';
-import { FullProduct } from '../../types/types.ts';
 import { getProductByID, getProducts } from '../../api/getAll.ts';
-import products from '../../../public/api/products.json';
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb.tsx';
 import { useAppDispatch } from '../../context/hooks.ts';
 import { addProduct } from '../../context/cartContext/cartSlice.ts';
 import { addFavourite, removeFavourite } from '../../context/favoriteContext/favouriteSlice.ts';
 import ProductSlider from '../../components/ProductSlider/ProductSlider.tsx';
+import { Product } from '../../types/types.ts';
 
 type Favorites = {
   id: string;
@@ -24,7 +23,7 @@ type Selected = {
 
 function ProductDetailsPage() {
   const [selectImg, SetSelectImg] = useState<string | undefined>('');
-  const [product, SetProduct] = useState<FullProduct | null | undefined>(null);
+  const [product, SetProduct] = useState<Product | null>(null);
   const [color, SetColor] = useState<string | undefined>('');
   const [capacity, SetCapacity] = useState<string | undefined>('');
   const [favorites, SetFavorites] = useState<Favorites[]>([]);
@@ -36,7 +35,7 @@ function ProductDetailsPage() {
 
   const navigate = useNavigate();
 
-  function handleCategoryId(categoryID?: string, element?: FullProduct | null) {
+  function handleCategoryId(categoryID?: string, element?: Product | null) {
     const splitedCategory = categoryID?.split('-');
 
     if (splitedCategory && element) {
@@ -96,9 +95,9 @@ function ProductDetailsPage() {
     if (id) {
       SetFavorites(state => {
         if (!state[0]?.isFavorite) {
-          dispatch(addFavourite(products.find(e => e.itemId === id)!));
+          dispatch(addFavourite(product!));
         } else {
-          dispatch(removeFavourite(products.find(e => e.itemId === id)!));
+          dispatch(removeFavourite(product!));
         }
         const itemIndex = state.findIndex(el => el.id === id);
 
@@ -113,7 +112,7 @@ function ProductDetailsPage() {
   }
 
   function handleSelected(id: string | undefined): void {
-    dispatch(addProduct(products.find(e => e.itemId === id)!));
+    dispatch(addProduct(product!));
     if (id) {
       Setselected(state => {
         const itemIndex = state.findIndex(el => el.id === id);
@@ -129,17 +128,24 @@ function ProductDetailsPage() {
   }
 
   useEffect(() => {
-    if (!product) {
-      getProductByID(categoryId).then(res => {
-        SetProduct(res);
-        SetCapacity(res.capacity);
-        SetColor(res.color);
-        SetSelectImg(res.images[0]);
+    getProductByID(categoryId).then(res => {
+      SetProduct(res);
+      SetCapacity(res.capacity);
+      SetColor(res.color);
+      SetSelectImg(res.images[0]);
 
-        navigate(`/shop/${category}/${res.id}`, { replace: true });
-      });
-    }
-  }, [category, categoryId, navigate, product]);
+      navigate(`/shop/${category}/${res.id}`, { replace: true });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, categoryId]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [categoryId]);
+
+  if (!product) {
+    return <h1>Loading</h1>;
+  }
 
   return (
     <>
