@@ -19,29 +19,29 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     incrementTotalPrice: (state: CartState, action: PayloadAction<Product>) => {
-      state.totalPrice += action.payload.price;
-      state.quantity[state.products.findIndex(e => e.itemId === action.payload.itemId)] += 1;
+      state.totalPrice += action.payload.priceRegular;
+      state.quantity[state.products.findIndex(e => e.id === action.payload.id)] += 1;
     },
     decreaseTotalPrice: (state: CartState, action: PayloadAction<Product>) => {
-      state.totalPrice -= action.payload.price;
-      state.quantity[state.products.findIndex(e => e.itemId === action.payload.itemId)] -= 1;
+      state.totalPrice -= action.payload.priceRegular;
+      state.quantity[state.products.findIndex(e => e.id === action.payload.id)] -= 1;
     },
     addProduct: (state: CartState, action: PayloadAction<Product>) => {
-      const isInCartYet = state.products.findIndex(e => e.itemId === action.payload.itemId);
+      const isInCartYet = state.products.findIndex(e => e.id === action.payload.id);
 
       if (isInCartYet === -1) {
         state.products.push(action.payload);
         state.quantity.push(1);
-        state.totalPrice += action.payload.price;
+        state.totalPrice += action.payload.priceRegular;
       } else {
         state.quantity[isInCartYet] += 1;
-        state.totalPrice += action.payload.price;
+        state.totalPrice += action.payload.priceRegular;
       }
     },
     removeProduct: (state: CartState, action: PayloadAction<Product>) => {
-      const indxToErase = state.products.findIndex(e => e.itemId === action.payload.itemId);
+      const indxToErase = state.products.findIndex(e => e.id === action.payload.id);
       state.products.splice(indxToErase, 1);
-      state.totalPrice -= action.payload.price * state.quantity[indxToErase];
+      state.totalPrice -= action.payload.priceRegular * state.quantity[indxToErase];
       state.quantity.splice(indxToErase, 1);
     },
     updateAllProducs: (

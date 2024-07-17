@@ -28,7 +28,7 @@ function ProductSlider(prop: ProductSliderProps): React.ReactNode {
       if (sortBy === 'newest') {
         fetchedProducts.sort((a, b) => new Date(b.year).getTime() - new Date(a.year).getTime());
       } else if (sortBy === 'cheapest') {
-        fetchedProducts.sort((a, b) => a.price - b.price);
+        fetchedProducts.sort((a, b) => a.priceRegular - b.priceRegular);
       }
 
       setProducts(fetchedProducts.slice(0, 20));
