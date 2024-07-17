@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Icon from '../../components/Icon/Icon.tsx';
 import { IconType } from '../../components/Icon/Icon.ts';
 import StyledProductDetailsPage from './StyledProductDetailsPage.ts';
-import './ProductSlider.css';
 import { FullProduct } from '../../types/types.ts';
 import { getProductByID, getProducts } from '../../api/getAll.ts';
 import products from '../../../public/api/products.json';
