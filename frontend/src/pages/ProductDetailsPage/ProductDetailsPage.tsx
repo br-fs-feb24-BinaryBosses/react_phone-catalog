@@ -3,39 +3,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Icon from '../../components/Icon/Icon.tsx';
 import { IconType } from '../../components/Icon/Icon.ts';
 import StyledProductDetailsPage from './StyledProductDetailsPage.ts';
+import './ProductSlider.css';
 import { FullProduct } from '../../types/types.ts';
-import { getProducts } from '../../api/getAll.ts';
-import phonesJson from '../../../public/api/phones.json';
-import tabletJson from '../../../public/api/tablets.json';
-import accessoriesJson from '../../../public/api/accessories.json';
+import { getProductByID, getProducts } from '../../api/getAll.ts';
 import products from '../../../public/api/products.json';
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb.tsx';
 import { useAppDispatch } from '../../context/hooks.ts';
 import { addProduct } from '../../context/cartContext/cartSlice.ts';
 import { addFavourite, removeFavourite } from '../../context/favoriteContext/favouriteSlice.ts';
 import ProductSlider from '../../components/ProductSlider/ProductSlider.tsx';
-
-/*
-  StyledBackHomeButton - Line 130 to 133 - probably will be a global component
-*/
-
-function checkCategoryProduct(category: string, itemId: string) {
-  if (category === 'phones') {
-    return phonesJson.find(phone => phone.id === itemId) || null;
-  }
-  if (category === 'accessories') {
-    return accessoriesJson.find(accessorie => accessorie.id === itemId) || null;
-  }
-  if (category === 'tablets') {
-    return tabletJson.find(tablet => tablet.id === itemId) || null;
-  }
-  return null;
-}
-
-const fullProducts = products.map(el => ({
-  ...el,
-  product: checkCategoryProduct(el.category, el.itemId),
-}));
 
 type Favorites = {
   id: string;
@@ -46,10 +22,6 @@ type Selected = {
   id: string;
   isSelected: boolean;
 };
-
-function testGetProductsByID(id: string | undefined) {
-  return fullProducts.find(prodct => prodct.itemId === id)?.product || null;
-}
 
 function ProductDetailsPage() {
   const [selectImg, SetSelectImg] = useState<string | undefined>('');
@@ -62,12 +34,10 @@ function ProductDetailsPage() {
 
   const { categoryId } = useParams();
   const { category } = useParams();
+
   const navigate = useNavigate();
 
-  function handleCategoryId(
-    categoryID: string | undefined,
-    element: FullProduct | null | undefined,
-  ) {
+  function handleCategoryId(categoryID?: string, element?: FullProduct | null) {
     const splitedCategory = categoryID?.split('-');
 
     if (splitedCategory && element) {
@@ -97,24 +67,13 @@ function ProductDetailsPage() {
 
     const newId = `${handleCategoryId(categoryId, product)}-${capacity.toLowerCase()}-${col}`;
 
-    // getProductByID(
-    //   `${handleCategoryId(categoryId, product)}-${capacity.toLowerCase()}-${col}`,
-    // ).then(res => {
-    //   SetProduct(res);
-    //   SetCapacity(res.capacity);
-    //   SetColor(res.color);
-    //   SetSelectImg(res.images[0]);
+    getProductByID(newId).then(res => {
+      SetProduct(res);
+      SetCapacity(res.capacity);
+      SetColor(res.color);
+      SetSelectImg(res.images[0]);
 
-    //   navigate(`/shop/${category}/${res.id}`, { replace: true });
-    // });
-
-    SetProduct(testGetProductsByID(newId));
-    SetCapacity(testGetProductsByID(newId)?.capacity);
-    SetColor(testGetProductsByID(newId)?.color);
-    SetSelectImg(testGetProductsByID(newId)?.images[0]);
-
-    navigate(`/shop/${category}/${testGetProductsByID(newId)?.id}`, {
-      replace: true,
+      navigate(`/shop/${category}/${res.id}`, { replace: true });
     });
   }
 
@@ -124,24 +83,13 @@ function ProductDetailsPage() {
 
     const newId = `${handleCategoryId(categoryId, product)}-${capac.toLowerCase()}-${color}`;
 
-    // getProductByID(`${handleCategoryId(categoryId, product)}-${capac.toLowerCase()}-${color}`).then(
-    //   res => {
-    //     SetProduct(res);
-    //     SetCapacity(res.capacity);
-    //     SetColor(res.color);
-    //     SetSelectImg(res.images[0]);
+    getProductByID(newId).then(res => {
+      SetProduct(res);
+      SetCapacity(res.capacity);
+      SetColor(res.color);
+      SetSelectImg(res.images[0]);
 
-    //     navigate(`/shop/${category}/${res.id}`, { replace: true });
-    //   },
-    // );
-
-    SetProduct(testGetProductsByID(newId));
-    SetCapacity(testGetProductsByID(newId)?.capacity);
-    SetColor(testGetProductsByID(newId)?.color);
-    SetSelectImg(testGetProductsByID(newId)?.images[0]);
-
-    navigate(`/shop/${category}/${testGetProductsByID(newId)?.id}`, {
-      replace: true,
+      navigate(`/shop/${category}/${res.id}`, { replace: true });
     });
   }
 
@@ -183,26 +131,14 @@ function ProductDetailsPage() {
 
   useEffect(() => {
     if (!product) {
-      //   getProductByID(categoryId).then(res => {
-      //     SetProduct(res);
-      //     SetCapacity(res.capacity);
-      //     SetColor(res.color);
-      //     SetSelectImg(res.images[0]);
-
-      //     navigate(`/shop/${category}/${res.id}`, { replace: true });
-      //   });
-      // }
-      const res = testGetProductsByID(categoryId);
-      if (res) {
+      getProductByID(categoryId).then(res => {
         SetProduct(res);
-        SetCapacity(res?.capacity);
-        SetColor(res?.color);
-        SetSelectImg(res?.images[0]);
+        SetCapacity(res.capacity);
+        SetColor(res.color);
+        SetSelectImg(res.images[0]);
 
-        navigate(`/shop/${category}/${res?.id}`, {
-          replace: true,
-        });
-      }
+        navigate(`/shop/${category}/${res.id}`, { replace: true });
+      });
     }
   }, [category, categoryId, navigate, product]);
 
@@ -439,9 +375,9 @@ function ProductDetailsPage() {
           </article>
         </section>
       </StyledProductDetailsPage>
+
       <ProductSlider title="You may also like!" getProducts={getProducts} sortBy="newest" />
     </>
   );
 }
-
 export default ProductDetailsPage;
