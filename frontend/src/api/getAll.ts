@@ -37,15 +37,3 @@ export const getSessionData = (idSession: string): Promise<SessionData> => {
     .then(data => data[0] as SessionData);
 };
 
-export const getOrderById = (id: string | undefined): Promise<Product> => {
-  return fetch(`${BASE_URL}products/${id}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Failed to fetch products: ${response.statusText}`);
-      }
-
-      return response.json();
-    })
-    .then(res => res.data as Product);
-};
-
