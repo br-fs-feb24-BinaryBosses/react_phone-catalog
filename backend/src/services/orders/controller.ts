@@ -7,47 +7,24 @@ const ordersRouter = express.Router();
 const ordersService = new OrdersService();
 
 ordersRouter.post(
-  "/insertOrder",
-  authMiddleware,
-  async (req: Request & { userId?: string }, res) => {
-    const { userId, status, token } = req.body;
-
-    if (!userId || !status || !token) {
-      return res.status(404).json({ message: "Fields can't be empty!" });
-    }
-    try {
-      const createdOrder = await ordersService.createOrder({
-        status: "active",
-        userId: req.userId!,
-      });
-
-      return StandardResponse.responseWrapper({
-        message: "ok",
-        res,
-        data: createdOrder,
-        statusCode: 200,
-      });
-    } catch (error) {
-      return res.status(500).json({ mesage: "Erro ao criar carrinho" });
-    }
-  }
-);
-
-ordersRouter.post(
   "/insertItemInOrder",
   authMiddleware,
   async (req: Request & { userId?: string }, res) => {
-    const { orderId, productId, quantity } = req.body;
+    const { userId } = req;
+    const { productId } = req.body;
 
-    if (!orderId || !productId || !quantity) {
-      return res.status(404).json({ message: "Fields can't be empty" });
+    if (!userId) {
+      return res.status(404).json({ message: "User not authenticated!" });
+    }
+
+    if (!productId) {
+      return res.status(404).json({ message: "Field can't be empty" });
     }
 
     try {
       const itemInserted = await ordersService.insertItemInOrder({
-        orderId,
         productId,
-        quantity,
+        userId,
       });
 
       return StandardResponse.responseWrapper({
@@ -61,7 +38,7 @@ ordersRouter.post(
         .status(500)
         .json({ mesage: "Erro ao adicionar item ao carrinho" });
     }
-  }
+  },
 );
 
 ordersRouter.get(
@@ -86,7 +63,7 @@ ordersRouter.get(
     } catch (error) {
       return res.status(500).json({ mesage: "Erro ao buscar ordem" });
     }
-  }
+  },
 );
 
 ordersRouter.delete(
@@ -111,7 +88,7 @@ ordersRouter.delete(
     } catch (error) {
       return res.status(500).json({ message: "Erro ao deletar carrinho" });
     }
-  }
+  },
 );
 
 ordersRouter.delete(
@@ -139,7 +116,7 @@ ordersRouter.delete(
         .status(500)
         .json({ message: "Erro ao deletar item do carrinho" });
     }
-  }
+  },
 );
 
 ordersRouter.patch(
@@ -170,9 +147,10 @@ ordersRouter.patch(
     } catch (error) {
       return res.status(500).json({ mesage: "Erro ao atualizar o carrinho" });
     }
-  }
+  },
 );
 
+// make sure the id it's the orderItemId, not the productId
 ordersRouter.patch(
   "/updateOrderItem/:id",
   authMiddleware,
@@ -196,11 +174,9 @@ ordersRouter.patch(
         statusCode: 200,
       });
     } catch (error) {
-      return res
-        .status(500)
-        .json({ message: "Erro ao atualizar o item do carrinho" });
+      return res.status(500).json({ message: error });
     }
-  }
+  },
 );
 
 export default ordersRouter;
