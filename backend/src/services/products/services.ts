@@ -42,8 +42,6 @@ class ProductServices {
       color = splitedColor.join("-");
     }
 
-    console.log(color);
-    console.log(colorsAvailable);
     
     allData.color = color;
     allData.colorsAvailable = colorsAvailable;
