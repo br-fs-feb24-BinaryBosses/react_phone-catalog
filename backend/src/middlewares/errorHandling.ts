@@ -1,8 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import AppError from "../errors/AppError";
 
-function errorHandling(err: unknown, _req: Request, res: Response, _next: NextFunction) {
-
+function errorHandling(
+  err: unknown,
+  _req: Request,
+  res: Response,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _next: NextFunction,
+) {
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
       status: "error",
