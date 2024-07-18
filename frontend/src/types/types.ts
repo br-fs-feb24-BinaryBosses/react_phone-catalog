@@ -26,6 +26,7 @@ export type FullProduct = {
 };
 
 export type Product = {
+  priceDiscount: any;
   id: number;
   category: string;
   itemId: string;

@@ -1,5 +1,7 @@
 import { FullProduct, Product, SessionData } from '../types/types.ts';
 
+const BASE_URL = 'http://localhost:3000';
+
 export const getProducts = (): Promise<Product[]> => {
   return fetch('/api/products.json')
     .then(response => {
@@ -34,4 +36,26 @@ export const getSessionData = (idSession: string): Promise<SessionData> => {
       return response.json();
     })
     .then(data => data[0] as SessionData);
+};
+
+export const getNewestModels = (): Promise<Product[]> => {
+  return fetch(`${BASE_URL}/homepage/newestModels`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch newest models: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => data.data as Product[]);
+};
+
+export const getHotPrices = (): Promise<Product[]> => {
+  return fetch(`${BASE_URL}/homepage/hotPrices`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch hot prices: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => data.data as Product[]);
 };
