@@ -83,7 +83,7 @@ model OrderItem {
   quantity   Int
   totalPrice Float  @map("total_price")
 
-  order   Order   @relation(fields: [orderId], references: [id])
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product @relation(fields: [productId], references: [id])
 
   @@map("order_items")
