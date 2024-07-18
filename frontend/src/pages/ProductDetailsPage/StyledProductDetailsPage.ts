@@ -216,6 +216,9 @@ const StyledProductDetailsPage = styled.div`
         &--spacegray {
           background-color: #4c4c4c;
         }
+        &--space-gray {
+          background-color: #4c4c4c;
+        }
         &--silver {
           background-color: #f0f0f0;
         }

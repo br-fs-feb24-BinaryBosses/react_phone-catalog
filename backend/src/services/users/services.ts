@@ -50,6 +50,19 @@ class UserService {
     }
   }
 
+  async getUsers() {
+    try {
+      const user = await prisma.user.findMany();
+
+      if (!user) {
+        throw new AppError("Usuers not Found", 404);
+      }
+      return user;
+    } catch (error) {
+      throw new AppError("Users Not Found", 404);
+    }
+  }
+
   async getUserData(userId?: string) {
     try {
       if (!userId) {

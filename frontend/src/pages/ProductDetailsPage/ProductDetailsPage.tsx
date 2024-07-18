@@ -3,13 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Icon from '../../components/Icon/Icon.tsx';
 import { IconType } from '../../components/Icon/Icon.ts';
 import StyledProductDetailsPage from './StyledProductDetailsPage.ts';
-import { getProductByID, getProducts } from '../../api/getAll.ts';
+import { addFavorite, deleteFavorite, getProductByID, getProducts } from '../../api/getAll.ts';
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb.tsx';
 import { useAppDispatch } from '../../context/hooks.ts';
 import { addProduct } from '../../context/cartContext/cartSlice.ts';
 import { addFavourite, removeFavourite } from '../../context/favoriteContext/favouriteSlice.ts';
 import ProductSlider from '../../components/ProductSlider/ProductSlider.tsx';
 import { Product } from '../../types/types.ts';
+import { userId } from '../FavoritesPage/FavoritesPage.tsx';
 
 type Favorites = {
   id: string;
@@ -95,9 +96,13 @@ function ProductDetailsPage() {
     if (id) {
       SetFavorites(state => {
         if (!state[0]?.isFavorite) {
-          dispatch(addFavourite(product!));
+          addFavorite(product!.id, userId).then(() => {
+            dispatch(addFavourite(product!));
+          });
         } else {
-          dispatch(removeFavourite(product!));
+          deleteFavorite(product!.id, userId).then(() => {
+            dispatch(removeFavourite(product!));
+          });
         }
         const itemIndex = state.findIndex(el => el.id === id);
 

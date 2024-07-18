@@ -31,6 +31,17 @@ usersRouter.post("/authenticateUser", async (req, res) => {
   res.json({ token });
 });
 
+usersRouter.get("/", async (_req, res) => {
+  const user = await usersService.getUsers();
+
+  StandardResponse.responseWrapper({
+    message: "ok",
+    res,
+    data: user,
+    statusCode: 200,
+  });
+});
+
 usersRouter.get(
   "/getUserData",
   authMiddleware,

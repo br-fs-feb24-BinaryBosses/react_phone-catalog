@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import AppError from "../../errors/AppError";
 
 const prisma = new PrismaClient();
 
@@ -15,7 +16,7 @@ class ProductServices {
     });
 
     if (!allData) {
-      return null;
+      throw new AppError("Product NOT FOUND", 404);
     }
 
     const { colorsAvailable } = allData;
@@ -42,9 +43,6 @@ class ProductServices {
       color = splitedColor.join("-");
     }
 
-    console.log(color);
-    console.log(colorsAvailable);
-    
     allData.color = color;
     allData.colorsAvailable = colorsAvailable;
 

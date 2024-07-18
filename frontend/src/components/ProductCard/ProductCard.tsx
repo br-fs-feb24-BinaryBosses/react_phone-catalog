@@ -8,6 +8,8 @@ import { addFavourite, removeFavourite } from '../../context/favoriteContext/fav
 import Icon from '../Icon/Icon.tsx';
 import { IconType } from '../Icon/Icon.ts';
 import store from '../../context/store.ts';
+import { addFavorite, deleteFavorite } from '../../api/getAll.ts';
+import { userId } from '../../pages/FavoritesPage/FavoritesPage.tsx';
 
 interface Prop {
   product: Product;
@@ -28,9 +30,13 @@ function ProductCard({ product }: Prop): React.ReactNode {
 
   const handleFavoriteClick = () => {
     if (isFavoriteProduct) {
-      dispatch(removeFavourite(product));
+      deleteFavorite(product.id, userId).then(() => {
+        dispatch(removeFavourite(product));
+      });
     } else {
-      dispatch(addFavourite(product));
+      addFavorite(product.id, userId).then(() => {
+        dispatch(addFavourite(product));
+      });
     }
 
     setFavorite(!favorite);
