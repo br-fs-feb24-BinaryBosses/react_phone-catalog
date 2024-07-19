@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../frontend_static/dist')));
 
-app.get('', (req, res) => {
+app.get('/home', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend_static/dist', 'index.html'));
 });
 
