@@ -39,6 +39,7 @@ export const getSessionData = (idSession: string): Promise<SessionData> => {
     .then(data => data[0] as SessionData);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getAllFavorites = (userId: string): Promise<Product[]> => {
   return fetch(`${BASE_URL}favorites/getFavorites`, {
     method: 'GET',
