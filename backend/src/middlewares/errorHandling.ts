@@ -14,6 +14,8 @@ function errorHandling(err: unknown, _req: Request, res: Response, _next: NextFu
     return;
   }
 
+  console.log(err);
+
   return res.status(500).json({
     status: "error",
     message: "Internal Server Error",
