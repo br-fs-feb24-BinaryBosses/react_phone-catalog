@@ -1,6 +1,6 @@
 import { OrderItem, Product, UserData } from '../types/types.ts';
 
-const BASE_URL = 'http://localhost:3000/';
+const BASE_URL = 'https://react-phone.onrender.com/';
 
 /* Atention! This method needs to be updated by api end point correctly */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -22,6 +22,7 @@ class UserService {
 
       return user;
     } catch (error) {
+      console.log(error)
       throw new AppError("User Not Created(Maybe e-mail is in use)", 500);
     }
   }
