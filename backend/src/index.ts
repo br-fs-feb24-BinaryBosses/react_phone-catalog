@@ -11,11 +11,9 @@ app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// Servir arquivos estáticos
 app.use(express.static(path.join(__dirname, '../frontend_static/dist')));
 
-// Definir uma rota para servir o arquivo index.html
-app.get('', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend_static/dist', 'index.html'));
 });
 
