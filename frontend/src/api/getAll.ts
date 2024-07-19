@@ -4,22 +4,40 @@ const BASE_URL = 'http://localhost:3000/';
 
 /* Atention! This method needs to be updated by api end point correctly */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const authUser = (data: {email: string, password: string}) => fetch(`${BASE_URL}users/authenticateUser`, {
-  method: "POST",
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(data)
-})
+export const authUser = (data: { email: string; password: string }) =>
+  fetch(`${BASE_URL}users/authenticateUser`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
     .then(response => {
-      if(!response.ok) {
+      if (!response.ok) {
         throw new Error('No Message');
       }
 
       return response.json();
     })
     .then(respondedData => {
-      console.log(respondedData, 'fdajkdakjfçakdjfçakjfç');
+      return respondedData.data as UserData;
+    });
+
+export const createUser = (data: { name: string; email: string; password: string }) =>
+  fetch(`${BASE_URL}users/createUser`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('No Message');
+      }
+      return response.json();
+    })
+    .then(respondedData => {
       return respondedData.data as UserData;
     });
 
@@ -68,7 +86,7 @@ export const addFavorite = (productId: string, tokenUser: string) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `bearer ${tokenUser}`,
+      Authorization: `bearer ${tokenUser}`,
     },
     body: JSON.stringify({ productId }),
   })
@@ -121,14 +139,13 @@ export const getHotPrices = (): Promise<Product[]> => {
 };
 
 export const getActiveCart = (tokenSession: string): Promise<OrderItem[]> => {
-  return fetch(`${BASE_URL}orders/getOrders`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${tokenSession}`,
-      },
-    })
+  return fetch(`${BASE_URL}orders/getOrders`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${tokenSession}`,
+    },
+  })
     .then(response => {
       if (!response.ok) {
         throw new Error(`Failed to find Active Order: ${response.statusText}`);
@@ -136,20 +153,19 @@ export const getActiveCart = (tokenSession: string): Promise<OrderItem[]> => {
       return response.json();
     })
     .then(response => {
-      console.log(response.data[0].orderItems);
-      return response.data[0].orderItems as OrderItem[]});
-}
+      return response.data[0].orderItems as OrderItem[];
+    });
+};
 
 export const insertItemOnCart = (productId: string, tokenSession: string): Promise<OrderItem> => {
-  return fetch(`${BASE_URL}orders/insertItemInOrder`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${tokenSession}`,
-      },
-      body: JSON.stringify({productId: productId}),
-    })
+  return fetch(`${BASE_URL}orders/insertItemInOrder`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${tokenSession}`,
+    },
+    body: JSON.stringify({ productId: productId }),
+  })
     .then(response => {
       if (!response.ok) {
         throw new Error(`Fail to add Product In Cart: ${response.statusText}`);
@@ -157,42 +173,45 @@ export const insertItemOnCart = (productId: string, tokenSession: string): Promi
       return response.json();
     })
     .then(data => data.data as OrderItem);
-  }
+};
 
-  export const updateItemInOrder = (itemId: string, quantity: number, tokenSession: string): Promise<OrderItem> => {
-    return fetch(`${BASE_URL}orders/updateOrderItem/${itemId}`,
-      {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${tokenSession}`,
-        },
-        body: JSON.stringify({quantity: quantity}),
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Fail to update item in Cart: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then(data => data.data as OrderItem);
-    }
-
-export const deleteItemOrder = (itemId: string, quantity: number, tokenSession: string): Promise<void> => {
-  return fetch(`${BASE_URL}orders/deleteOrderItem/${itemId}`,
-    {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${tokenSession}`,
-      },
-      body: JSON.stringify({quantity: quantity}),
-    })
+export const updateItemInOrder = (
+  itemId: string,
+  quantity: number,
+  tokenSession: string,
+): Promise<OrderItem> => {
+  return fetch(`${BASE_URL}orders/updateOrderItem/${itemId}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${tokenSession}`,
+    },
+    body: JSON.stringify({ quantity: quantity }),
+  })
     .then(response => {
       if (!response.ok) {
-        throw new Error(`Fail to delete: ${response.statusText}`);
+        throw new Error(`Fail to update item in Cart: ${response.statusText}`);
       }
+      return response.json();
     })
-  }
+    .then(data => data.data as OrderItem);
+};
 
-      
+export const deleteItemOrder = (
+  itemId: string,
+  quantity: number,
+  tokenSession: string,
+): Promise<void> => {
+  return fetch(`${BASE_URL}orders/deleteOrderItem/${itemId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${tokenSession}`,
+    },
+    body: JSON.stringify({ quantity: quantity }),
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error(`Fail to delete: ${response.statusText}`);
+    }
+  });
+};

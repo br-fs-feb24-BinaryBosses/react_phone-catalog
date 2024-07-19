@@ -14,7 +14,6 @@ const StyledFooter = styled.footer`
   }
 
   .footer__item {
-    margin-right: 64px;
     text-transform: uppercase;
     font-family: Mont;
     font-size: 12px;
@@ -38,7 +37,7 @@ const StyledFooter = styled.footer`
 
   .footer__center-links {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     flex-grow: 1;
   }
 

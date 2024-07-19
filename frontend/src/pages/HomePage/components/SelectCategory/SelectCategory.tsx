@@ -19,8 +19,12 @@ function SelectCategory(): React.ReactNode {
     <StyledSelectCategory className="category">
       {categories.map(category => (
         <div key={category.name} className="category-item">
-          <Link to={`/shop/${category.name}`}>
-            <img className="category__image" src={category.images} alt={category.name} />
+          <Link to={`/shop/${category.name.toLowerCase()}`}>
+            <img
+              className="category__image"
+              src={category.images}
+              alt={category.name.toLowerCase()}
+            />
           </Link>
           <div className="category__name">{`${category.name.charAt(0).toUpperCase() + category.name.slice(1)}`}</div>
           <div className="category__amount">{`${category.amount} models`}</div>
