@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import StyledFavoritesPage from './StyledFavoritesPage.ts';
 import ProductCard from '../../components/ProductCard/ProductCard.tsx';
 import { Product } from '../../types/types.ts';
@@ -8,6 +9,7 @@ import { updateAllFavourites } from '../../context/favoriteContext/favouriteSlic
 
 function FavoritesPage(): React.ReactNode {
   const contentPage: Product[] = useAppSelector(state => state.favourites.products);
+  const { t } = useTranslation();
   const tokenSession = useAppSelector(state => state.user.tokenSession);
   const dispatch = useAppDispatch();
 
@@ -21,9 +23,9 @@ function FavoritesPage(): React.ReactNode {
   return (
     <StyledFavoritesPage className="page-catalog">
       <div className="top-section">
-        <h1 className="top-section__title">Favourites</h1>
+        <h1 className="top-section__title">{t('Favorites')}</h1>
         <h2 className="top-section__subtitle">
-          {contentPage.length ? contentPage.length : 0} items
+          {contentPage.length ? contentPage.length : 0} {t('items')}
         </h2>
       </div>
       <div className="list">

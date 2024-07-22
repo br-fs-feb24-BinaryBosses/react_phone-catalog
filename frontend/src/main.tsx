@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import App from './App.tsx';
 import { GlobalStyles } from './styles/GlobalStyles.ts';
 import store from './context/store.ts';
+import './i18n.ts';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <BrowserRouter>

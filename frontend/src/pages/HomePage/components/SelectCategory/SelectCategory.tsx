@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import StyledSelectCategory from './StyledSelectCategory.ts';
 
 interface CategoryProps {
@@ -15,6 +16,7 @@ const categories: CategoryProps[] = [
 ];
 
 function SelectCategory(): React.ReactNode {
+  const { t } = useTranslation();
   return (
     <StyledSelectCategory className="category">
       {categories.map(category => (
@@ -27,7 +29,7 @@ function SelectCategory(): React.ReactNode {
             />
           </Link>
           <div className="category__name">{`${category.name.charAt(0).toUpperCase() + category.name.slice(1)}`}</div>
-          <div className="category__amount">{`${category.amount} models`}</div>
+          <div className="category__amount">{`${category.amount} ${t('models')}`}</div>
         </div>
       ))}
     </StyledSelectCategory>

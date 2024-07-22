@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import StyledPageCatalog from './StyledPageCatalog.ts';
 import ProductCard from '../../components/ProductCard/ProductCard.tsx';
@@ -56,6 +57,7 @@ function PageCatalog(): React.ReactNode {
   const [renderedData, setRenderedData] = useState<Product[]>([]);
   const [sortOption, setSortOption] = useState<SortOptions | string>('newest');
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -197,7 +199,6 @@ function PageCatalog(): React.ReactNode {
 
   useEffect(() => {
     if (contentPage.length !== 0) {
-      
       setButtonsNumber([]);
 
       handleSetProducts(renderedData);
@@ -219,8 +220,7 @@ function PageCatalog(): React.ReactNode {
     return <h1>Loading</h1>;
   }
 
-  const categoryTitle = categoryMapping[category ?? ''] || 'Products';
-
+  const categoryTitle = category ? t(categoryMapping[category]) : t('products');
   return (
     <StyledPageCatalog className="page-catalog">
       {!isLoading && (
@@ -229,11 +229,13 @@ function PageCatalog(): React.ReactNode {
           <StyledToastContainer />
           <div className="top-section">
             <h1 className="top-section__title">{categoryTitle}</h1>
-            <h2 className="top-section__subtitle">{renderedData.length} models</h2>
+            <h2 className="top-section__subtitle">
+              {renderedData.length} {t('models')}
+            </h2>
           </div>
           <div className="select">
             <div className="select__wrapper">
-              <h1 className="select__label">Sort By</h1>
+              <h1 className="select__label">{t('sortBy')}</h1>
               <Dropdown
                 options={sortOptions}
                 onChange={value => {
@@ -243,7 +245,7 @@ function PageCatalog(): React.ReactNode {
               />
             </div>
             <div className="select__wrapper">
-              <h1 className="select__label">Items on page</h1>
+              <h1 className="select__label">{t('itemsOnPage')}</h1>
 
               <Dropdown
                 options={itemsPerPageOptions}

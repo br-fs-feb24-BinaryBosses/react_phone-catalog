@@ -1,9 +1,11 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import StyledFooter from './StyledFooter.ts';
 import Icon from '../Icon/Icon.tsx';
 import { IconType } from '../Icon/Icon.ts';
 
 function Footer(): React.ReactNode {
+  const { t } = useTranslation();
   return (
     <StyledFooter className="footer">
       <footer id="footer-bar" className="footer__links">
@@ -11,18 +13,23 @@ function Footer(): React.ReactNode {
           <img id="footer__logo" src="/img/icons/logo.png" alt="Logo" />
         </div>
         <div className="footer__center-links">
-          <a href="/" className="footer__item">
+          <a
+            href="https://github.com/br-fs-feb24-BinaryBosses/react_phone-catalog"
+            target="_blank"
+            className="footer__item"
+            rel="noreferrer"
+          >
             GitHub
           </a>
           <a href="/" className="footer__item">
-            Contacts
+            {t('footerContacts')}
           </a>
           <a href="/" className="footer__item">
-            Rights
+            {t('footerRights')}
           </a>
         </div>
         <a href="#App" className="footer__item footer__icons">
-          <span>Back to top</span>
+          <span>{t('backToTop')}</span>
           <Icon icon={IconType.ARROW_UP} border fill="black" />
         </a>
       </footer>

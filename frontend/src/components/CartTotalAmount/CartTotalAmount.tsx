@@ -1,4 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { useTranslation } from 'react-i18next';
 import StyledCartTotalAmount from './StyledCartTotalAmount.ts';
 import { useAppSelector } from '../../context/hooks.ts';
 

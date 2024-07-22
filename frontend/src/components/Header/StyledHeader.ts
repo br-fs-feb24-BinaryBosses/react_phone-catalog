@@ -100,6 +100,7 @@ const StyledHeaderN = styled.header`
     height: 100%;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 
     &__btn {
       height: 100%;
