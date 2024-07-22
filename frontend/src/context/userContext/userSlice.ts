@@ -4,21 +4,27 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UserState {
   tokenSession: string;
+  name: string;
+  email: string;
 }
 
-const initialState: UserState = {
+export const userStateInitialState: UserState = {
   tokenSession: '',
+  name: '',
+  email: ''
 };
 
 const userState = createSlice({
   name: 'userState',
-  initialState,
+  initialState: userStateInitialState,
   reducers: {
-    setUserSession: (state: UserState, action: PayloadAction<string>) => {
-      state.tokenSession = action.payload;
-    },
+    setUserDataSession: (state: UserState, action: PayloadAction<{tokenSession: string, name: string, email: string}>) => {
+      state.email = action.payload.email;
+      state.name = action.payload.name;
+      state.tokenSession = action.payload.tokenSession;
+    }
   },
 });
 
-export const { setUserSession } = userState.actions;
+export const { setUserDataSession } = userState.actions;
 export default userState.reducer;

@@ -9,32 +9,39 @@ import { addFavourite, removeFavourite } from '../../context/favoriteContext/fav
 import Icon from '../Icon/Icon.tsx';
 import { IconType } from '../Icon/Icon.ts';
 import store from '../../context/store.ts';
+import { addFavorite, deleteFavorite, insertItemOnCart } from '../../api/getAll.ts';
+import { useAppSelector } from '../../context/hooks.ts';
 
 interface Prop {
   product: Product;
 }
 
 function ProductCard({ product }: Prop): React.ReactNode {
-  const productIsInCart = store.getState().cart.products.some(e => e.itemId === product.itemId);
-
-  const isFavoriteProduct = store
-    .getState()
-    .favourites.products.some(e => e.itemId === product.itemId);
+  const productIsInCart = useAppSelector(state => state.cart.orderItems.some(e => e.id === product.id));
+  const tokenSession = useAppSelector(state => state.user.tokenSession);
+  const isFavoriteProduct = store.getState().favourites.products.some(e => e.id === product.id);
   const dispatch = useDispatch();
   const [favorite, setFavorite] = useState(isFavoriteProduct);
   const [addToCardOrNot, setAddToCardOrNot] = useState(productIsInCart);
   const { t } = useTranslation();
 
   const handleAddProductToCartClickButton = () => {
-    dispatch(addProduct(product));
-    setAddToCardOrNot(true);
+    insertItemOnCart(product.id, tokenSession)
+      .then(data => {
+        dispatch(addProduct(data));
+        setAddToCardOrNot(true);
+      })
   };
 
   const handleFavoriteClick = () => {
     if (isFavoriteProduct) {
-      dispatch(removeFavourite(product));
+      deleteFavorite(product.id, tokenSession).then(() => {
+        dispatch(removeFavourite(product));
+      });
     } else {
-      dispatch(addFavourite(product));
+      addFavorite(product.id, tokenSession).then(() => {
+        dispatch(addFavourite(product));
+      });
     }
 
     setFavorite(!favorite);
@@ -43,13 +50,13 @@ function ProductCard({ product }: Prop): React.ReactNode {
   return (
     <StyledProductCard className="product-card">
       <div className="product-card__wrapper">
-        <Link className="product-card__link" to={`/shop/${product.category}/${product.itemId}`}>
+        <Link className="product-card__link" to={`/shop/${product.category}/${product.id}`}>
           <img className="product-card__image" src={`/${product.image}`} alt={product.name} />
           <div className="product-card__description">
             <h4 className="product-card__description-title">{product.name}</h4>
             <div className="product-card__description-price-wrapper">
-              <h3 className="product-card__description-price-discount">{`${t('$')}${product.price}`}</h3>
-              <h3 className="product-card__description-price">{`${t('$')}${product.fullPrice}`}</h3>
+              <h3 className="product-card__description-price-discount">{`${t('$')}${product.priceDiscount}`}</h3>
+              <h3 className="product-card__description-price">{`${t('$')}${product.priceRegular}`}</h3>
             </div>
           </div>
           <hr className="product-card__custom-line" />
@@ -77,7 +84,7 @@ function ProductCard({ product }: Prop): React.ReactNode {
             onClick={handleAddProductToCartClickButton}
             disabled={addToCardOrNot}
           >
-            {addToCardOrNot ? t('added') : t('addToCart')}
+            {productIsInCart ? t('added') : t('addToCart')}
           </button>
           <button
             type="button"

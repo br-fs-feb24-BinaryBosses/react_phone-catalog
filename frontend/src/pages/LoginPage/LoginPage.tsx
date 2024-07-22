@@ -1,59 +1,23 @@
 import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import StyledLoginPage from './StyledLoginPage.ts';
+import { authUser, createUser, getActiveCart, getAllFavorites } from '../../api/getAll.ts';
+import { useAppDispatch } from '../../context/hooks.ts';
+import { setUserDataSession } from '../../context/userContext/userSlice.ts';
+import { toast } from 'react-toastify';
+import StyledToastContainer from '../../components/ToastContainer/StyledToastContainer.ts';
+import { updateAllFavourites } from '../../context/favoriteContext/favouriteSlice.ts';
+import { updateAllProducs } from '../../context/cartContext/cartSlice.ts';
 
 function LoginPage(): React.ReactNode {
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [email, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isCreated, setIsCreated] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  async function mockLoginApi(mockedUser: string, mockedPassword: string): Promise<boolean> {
-    const fileName = `${mockedUser}_${mockedPassword}.json`;
-    const filePath = `/api/users/${fileName}`;
-
-    try {
-      const response = await fetch(filePath);
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const userData = await response.json();
-      return userData.some(
-        (user: { userName: string; passwd: string }) =>
-          user.userName === mockedUser && user.passwd === mockedPassword,
-      );
-    } catch (error) {
-      return false;
-    }
-  }
-
-  async function mockCreateAccountApi(
-    mockedUser: string,
-    mockedPassword: string,
-  ): Promise<boolean> {
-    const newUser = { userName: mockedUser, passwd: mockedPassword };
-    const fileName = `${mockedUser}_${mockedPassword}.json`;
-    const filePath = `/api/users/${fileName}`;
-
-    try {
-      const response = await fetch(filePath, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newUser),
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
 
   function handleUsernameChange(event: React.ChangeEvent<HTMLInputElement>) {
     setUsername(event.target.value);
@@ -67,34 +31,61 @@ function LoginPage(): React.ReactNode {
     setShowPassword(prevShowPassword => !prevShowPassword);
   }
 
-  async function handleSubmit(event: React.FormEvent) {
+  function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setErrorMessage('');
 
-    const isAuthenticated = await mockLoginApi(username, password);
+    authUser({ email, password })
+      .then(data => {
+        dispatch(setUserDataSession(data));
+        getAllFavorites(data.tokenSession).then(data => {
+          dispatch(updateAllFavourites(data));
+          dispatch(updateAllProducs({ orderItemsArray: [] }));
+          setIsCreated(false);
+        });
 
-    if (isAuthenticated) {
-      toast.success(`Loading successfull...`, {
-        position: 'bottom-center',
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeButton: false,
-      });
-      setTimeout(() => {
+        getActiveCart(data.tokenSession).then(data => {
+          if (!data) {
+            return [];
+          }
+          dispatch(updateAllProducs({ orderItemsArray: data }));
+        });
         navigate('/home');
-      }, 1000);
-    } else {
-      toast.error('Invalid username or password', {
-        position: 'bottom-center',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeButton: false,
+      })
+      .then(() => {})
+      .catch(() => {
+        toast.error('User not found', {
+          position: 'bottom-center',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeButton: false,
+        });
       });
-    }
   }
 
   async function handleCreateAccount() {
-    const isCreated = await mockCreateAccountApi(username, password);
+    if (!isCreated) {
+      setIsCreated(true);
+      return;
+    }
+    createUser({ name, email, password }).then(() => {
+      authUser({ email, password }).then(data => {
+        dispatch(setUserDataSession(data));
+        getAllFavorites(data.tokenSession).then(data => {
+          dispatch(updateAllFavourites(data));
+          dispatch(updateAllProducs({ orderItemsArray: [] }));
+          setIsCreated(false);
+        });
+
+        getActiveCart(data.tokenSession).then(data => {
+          if (!data) {
+            return [];
+          }
+          dispatch(updateAllProducs({ orderItemsArray: data }));
+        });
+        navigate('/home');
+      });
+    });
 
     if (isCreated) {
       toast.success('Account created successfully!', {
@@ -112,10 +103,9 @@ function LoginPage(): React.ReactNode {
       });
     }
   }
-
   return (
     <StyledLoginPage className="login">
-      <ToastContainer />
+      <StyledToastContainer />
       <div className="background">
         <span />
         <span />
@@ -132,15 +122,30 @@ function LoginPage(): React.ReactNode {
       <div className="login-container">
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form login-group">
+            {isCreated && (
+              <label className="form-label" htmlFor="username">
+                Nome:
+                <div className="password-login-container">
+                  <input
+                    type="text"
+                    id="username"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    placeholder="Enter your name here"
+                    required
+                  />
+                </div>
+              </label>
+            )}
             <label className="form-label" htmlFor="username">
-              Username:
+              Email:
               <div className="password-login-container">
                 <input
-                  type="text"
+                  type="email"
                   id="username"
-                  value={username}
+                  value={email}
                   onChange={handleUsernameChange}
-                  placeholder="Enter you name here"
+                  placeholder="Enter your email here"
                   required
                 />
               </div>

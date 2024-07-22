@@ -8,27 +8,27 @@ function Footer(): React.ReactNode {
   const { t } = useTranslation();
   return (
     <StyledFooter className="footer">
-      <footer id="footer_bar" className="footerlinks">
-        <div className="footer-item">
-          <img id="logo" src="/img/icons/logo.png" alt="Logo" />
+      <footer id="footer-bar" className="footer__links">
+        <div className="footer__item">
+          <img id="footer__logo" src="/img/icons/logo.png" alt="Logo" />
         </div>
-        <div className="center-links">
+        <div className="footer__center-links">
           <a
             href="https://github.com/br-fs-feb24-BinaryBosses/react_phone-catalog"
             target="_blank"
-            className="footer-item"
+            className="footer__item"
             rel="noreferrer"
           >
             GitHub
           </a>
-          <a href="/" className="footer-item">
+          <a href="/" className="footer__item">
             {t('footerContacts')}
           </a>
-          <a href="/" className="footer-item">
+          <a href="/" className="footer__item">
             {t('footerRights')}
           </a>
         </div>
-        <a href="#App" className="footer-item icons">
+        <a href="#App" className="footer__item footer__icons">
           <span>{t('backToTop')}</span>
           <Icon icon={IconType.ARROW_UP} border fill="black" />
         </a>

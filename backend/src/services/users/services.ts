@@ -22,6 +22,7 @@ class UserService {
 
       return user;
     } catch (error) {
+      console.log(error)
       throw new AppError("User Not Created(Maybe e-mail is in use)", 500);
     }
   }
@@ -35,18 +36,27 @@ class UserService {
       }
 
       const passwordMatch = await bcrypt.compare(password, user.password);
+      
+      
 
       if (!passwordMatch) {
-        throw new AppError("Invalid password", 401);
+        throw new AppError("Invalid password", 404);
       }
 
-      const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+
+
+      const tokenSession = jwt.sign({ userId: user.id }, JWT_SECRET, {
         expiresIn: "1h",
       });
 
-      return token;
-    } catch {
-      throw new AppError("Error in service", 500);
+
+      return {name: user.name, tokenSession};
+    } catch (error){
+      if (error instanceof AppError) {
+        throw error;
+      } else {
+        throw new AppError("Internal Server Error", 500);
+      }
     }
   }
 
