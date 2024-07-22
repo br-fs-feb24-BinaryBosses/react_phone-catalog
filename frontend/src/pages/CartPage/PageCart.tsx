@@ -10,20 +10,19 @@ import { OrderItem } from '../../types/types.ts';
 import { updateAllProducs } from '../../context/cartContext/cartSlice.ts';
 
 function PageCart(): React.ReactNode {
-  const [orderItems, setOrderItems] = useState<OrderItem[]>([])
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const dispatch = useAppDispatch();
   const tokenSession = useAppSelector(state => state.user.tokenSession);
   const { t } = useTranslation();
 
   useEffect(() => {
-    getActiveCart(tokenSession)
-      .then(data => {
-        if (!data) {
-          return []
-        }
-        dispatch(updateAllProducs({orderItemsArray: data}));
-        setOrderItems(data);
-      });
+    getActiveCart(tokenSession).then(data => {
+      if (!data) {
+        return [];
+      }
+      dispatch(updateAllProducs({ orderItemsArray: data }));
+      setOrderItems(data);
+    });
   }, [tokenSession]);
 
   return (
@@ -32,9 +31,11 @@ function PageCart(): React.ReactNode {
 
       <div className="cart-item__products-wrapper">
         <div className="cart-item__products-content">
-          {orderItems.map(orderItem => (<CartItem firstOrder={orderItem} setOrdersItems={setOrderItems} />))}
+          {orderItems.map(orderItem => (
+            <CartItem firstOrder={orderItem} setOrdersItems={setOrderItems} />
+          ))}
         </div>
-        {<CartTotalAmount />}
+        <CartTotalAmount />
       </div>
     </StyledCartPage>
   );

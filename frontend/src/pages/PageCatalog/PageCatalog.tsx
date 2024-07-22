@@ -199,7 +199,6 @@ function PageCatalog(): React.ReactNode {
 
   useEffect(() => {
     if (contentPage.length !== 0) {
-      
       setButtonsNumber([]);
 
       handleSetProducts(renderedData);
@@ -231,8 +230,8 @@ function PageCatalog(): React.ReactNode {
           <div className="top-section">
             <h1 className="top-section__title">{categoryTitle}</h1>
             <h2 className="top-section__subtitle">
-          {renderedData.length} {t('models')}
-        </h2>
+              {renderedData.length} {t('models')}
+            </h2>
           </div>
           <div className="select">
             <div className="select__wrapper">

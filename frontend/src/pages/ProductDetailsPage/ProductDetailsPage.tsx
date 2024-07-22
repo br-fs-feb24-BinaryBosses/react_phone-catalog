@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Icon from '../../components/Icon/Icon.tsx';
 import { IconType } from '../../components/Icon/Icon.ts';
 import StyledProductDetailsPage from './StyledProductDetailsPage.ts';
-import { addFavorite, deleteFavorite, getProductByID } from '../../api/getAll.ts';
+import { addFavorite, deleteFavorite, getProductByID, getNewestModels } from '../../api/getAll.ts';
 import Breadcrumb from '../../components/Breadcrumb/Breadcrumb.tsx';
 import { useAppDispatch, useAppSelector } from '../../context/hooks.ts';
 import { addProduct } from '../../context/cartContext/cartSlice.ts';
@@ -25,9 +25,9 @@ function ProductDetailsPage(): React.ReactNode {
   const favorites = useAppSelector(state => state.favourites.products);
   const [selected, Setselected] = useState<Selected[]>([]);
   const dispatch = useAppDispatch();
-  const { t } = useTranslation();
   const { categoryId } = useParams();
   const { category } = useParams();
+  const { t } = useTranslation();
 
   const tokenSession = useAppSelector(state => state.user.tokenSession);
 
@@ -91,15 +91,15 @@ function ProductDetailsPage(): React.ReactNode {
 
   function handleFavorites(id: string | undefined): void {
     if (id) {
-        if (favorites.some(e => e.id === id)) {
-          deleteFavorite(product!.id, tokenSession).then(() => {
-            dispatch(removeFavourite(product!));
-          });
-        } else {
-          addFavorite(product!.id, tokenSession).then(() => {
-            dispatch(addFavourite(product!));
-          });
-        }
+      if (favorites.some(e => e.id === id)) {
+        deleteFavorite(product!.id, tokenSession).then(() => {
+          dispatch(removeFavourite(product!));
+        });
+      } else {
+        addFavorite(product!.id, tokenSession).then(() => {
+          dispatch(addFavourite(product!));
+        });
+      }
     }
   }
 
@@ -138,7 +138,6 @@ function ProductDetailsPage(): React.ReactNode {
   if (!product) {
     return <h1>Loading</h1>;
   }
-
   return (
     <>
       <StyledProductDetailsPage className="product-details-page">
@@ -376,7 +375,7 @@ function ProductDetailsPage(): React.ReactNode {
           </article>
         </section>
       </StyledProductDetailsPage>
-      <ProductSlider title={t('recommendation')} getProducts={getProducts} sortBy="newest" />
+      <ProductSlider title={t('brandNewModels')} getProducts={getNewestModels} />
     </>
   );
 }

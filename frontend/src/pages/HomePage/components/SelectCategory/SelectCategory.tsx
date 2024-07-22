@@ -16,6 +16,7 @@ const categories: CategoryProps[] = [
 ];
 
 function SelectCategory(): React.ReactNode {
+  const { t } = useTranslation();
   return (
     <StyledSelectCategory className="category">
       {categories.map(category => (
